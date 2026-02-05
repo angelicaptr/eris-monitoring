@@ -1,5 +1,0 @@
-{
-    "message": "Connection timeout on SQL Query",
-    "stack_trace": "Error at line 45 in DatabaseConnector.php",
-    "severity": "critical"
-}
