@@ -81,7 +81,7 @@ class LogController extends Controller
                 $isEmailEnabled = $setting ? filter_var($setting->value, FILTER_VALIDATE_BOOLEAN) : false;
 
                 if ($isEmailEnabled) {
-                    $developers = \App\Models\User::where('role', 'developer')->pluck('email');
+                    $developers = $app->developers()->pluck('email');
 
                     if ($developers->isNotEmpty()) {
                         \Illuminate\Support\Facades\Mail::to($developers)->send(new \App\Mail\CriticalErrorNotification($log));

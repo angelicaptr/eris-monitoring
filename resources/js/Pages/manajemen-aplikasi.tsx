@@ -10,10 +10,13 @@ import { Plus, Eye, EyeOff, Copy, Terminal, AlertCircle, Pencil, Trash2, Grid } 
 import { toast } from "sonner";
 import { PageHeader } from "@/Components/ui/page-header";
 import { Skeleton } from "@/Components/ui/skeleton";
+import { MultiSelect, Option } from "@/Components/ui/multi-select";
+import { AvatarStack } from "@/Components/ui/avatar-stack";
 
 export function ManajemenAplikasi({ user }: { user: any }) {
 
     const [apps, setApps] = useState<any[]>([]);
+    const [developers, setDevelopers] = useState<Option[]>([]);
     const [loading, setLoading] = useState(true);
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -24,13 +27,29 @@ export function ManajemenAplikasi({ user }: { user: any }) {
     const [formData, setFormData] = useState({
         app_name: "",
         description: "",
-        notification_email: ""
+        notification_email: "",
+        developers: [] as string[]
     });
 
     useEffect(() => {
-
         fetchApps();
+        fetchDevelopers();
     }, []);
+
+    const fetchDevelopers = () => {
+        (window as any).axios.get('/api/users/developers')
+            .then((res: any) => {
+                const options = res.data.map((dev: any) => ({
+                    label: dev.name,
+                    value: String(dev.id),
+                    icon: null
+                }));
+                setDevelopers(options);
+            })
+            .catch((err: any) => {
+                console.error("Gagal memuat developer", err);
+            });
+    }
 
     const fetchApps = () => {
         setLoading(true);
@@ -50,7 +69,8 @@ export function ManajemenAplikasi({ user }: { user: any }) {
         setFormData({
             app_name: "",
             description: "",
-            notification_email: ""
+            notification_email: "",
+            developers: []
         });
         setSelectedApp(null);
     };
@@ -78,7 +98,8 @@ export function ManajemenAplikasi({ user }: { user: any }) {
         setFormData({
             app_name: app.app_name,
             description: app.description || "",
-            notification_email: app.notification_email || ""
+            notification_email: app.notification_email || "",
+            developers: app.developers ? app.developers.map((d: any) => String(d.id)) : []
         });
         setIsEditOpen(true);
     };
@@ -132,10 +153,12 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                     description="Daftarkan dan kelola akses aplikasi yang dimonitor."
                     icon={Grid}
                 >
-                    <Button className="bg-eris-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200" onClick={() => { resetForm(); setIsCreateOpen(true); }}>
-                        <Plus className="w-4 h-4 mr-2" />
-                        Tambah Aplikasi
-                    </Button>
+                    {(user?.role === 'admin') && (
+                        <Button className="bg-eris-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200" onClick={() => { resetForm(); setIsCreateOpen(true); }}>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Tambah Aplikasi
+                        </Button>
+                    )}
                 </PageHeader>
 
                 <Card className="border-slate-200 shadow-sm">
@@ -143,8 +166,9 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                         <Table>
                             <TableHeader className="bg-slate-50 border-b border-slate-200">
                                 <TableRow>
-                                    <TableHead className="w-[60px] text-center font-semibold text-slate-600">No</TableHead>
+                                    <TableHead className="w-[50px] text-center font-semibold text-slate-600">No</TableHead>
                                     <TableHead className="font-semibold text-slate-600 min-w-[200px]">Aplikasi</TableHead>
+                                    <TableHead className="font-semibold text-slate-600 min-w-[120px]">Tim Developer</TableHead>
                                     <TableHead className="font-semibold text-slate-600">API Key</TableHead>
                                     <TableHead className="font-semibold text-slate-600 w-[100px] text-center">Aksi</TableHead>
                                 </TableRow>
@@ -154,15 +178,16 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                     Array.from({ length: 5 }).map((_, i) => (
                                         <TableRow key={i}>
                                             <TableCell className="text-center"><Skeleton className="h-4 w-4 mx-auto" /></TableCell>
-                                            <TableCell><Skeleton className="h-4 w-[200px]" /><Skeleton className="h-3 w-[150px] mt-2" /></TableCell>
+                                            <TableCell><Skeleton className="h-4 w-[150px]" /><Skeleton className="h-3 w-[100px] mt-2" /></TableCell>
+                                            <TableCell><Skeleton className="h-8 w-24" /></TableCell>
                                             <TableCell><Skeleton className="h-4 w-[250px]" /></TableCell>
                                             <TableCell className="text-right"><Skeleton className="h-8 w-16 ml-auto" /></TableCell>
                                         </TableRow>
                                     ))
                                 ) : apps.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={4} className="h-32 text-center text-slate-500">
-                                            Belum ada aplikasi terdaftar.
+                                        <TableCell colSpan={5} className="h-32 text-center text-slate-500">
+                                            {user?.role === 'admin' ? "Belum ada aplikasi terdaftar." : "Anda belum ditugaskan ke aplikasi mana pun."}
                                         </TableCell>
                                     </TableRow>
                                 ) : (
@@ -171,19 +196,22 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                             <TableCell className="text-center text-slate-500 font-mono text-xs">{index + 1}</TableCell>
                                             <TableCell>
                                                 <div className="font-medium text-slate-900">{app.app_name}</div>
-                                                {app.description && <div className="text-xs text-slate-500 mt-1 line-clamp-1 max-w-[300px]">{app.description}</div>}
+                                                {app.description && <div className="text-xs text-slate-500 mt-1 line-clamp-1 max-w-[200px]">{app.description}</div>}
+                                            </TableCell>
+                                            <TableCell>
+                                                <AvatarStack users={app.developers} limit={3} />
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <div className="relative group">
-                                                        <code className="text-[11px] bg-slate-100 px-2 py-1.5 rounded font-mono border border-slate-200 text-slate-600 inline-block min-w-[220px]">
+                                                        <code className="text-[11px] bg-slate-100 px-2 py-1.5 rounded font-mono border border-slate-200 text-slate-600 inline-block min-w-[180px] max-w-[180px] truncate">
                                                             {visibleKeyId === app.id ? app.api_key : "•".repeat(32)}
                                                         </code>
                                                     </div>
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-7 w-7 text-slate-400 hover:text-eris-indigo-600 hover:bg-indigo-50"
+                                                        className="h-7 w-7 text-slate-400 hover:text-eris-indigo-600 hover:bg-indigo-50 shrink-0"
                                                         onClick={() => setVisibleKeyId(visibleKeyId === app.id ? null : app.id)}
                                                     >
                                                         {visibleKeyId === app.id ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -191,7 +219,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-7 w-7 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50"
+                                                        className="h-7 w-7 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 shrink-0"
                                                         onClick={() => copyToClipboard(app.api_key)}
                                                     >
                                                         <Copy className="w-3.5 h-3.5" />
@@ -261,6 +289,16 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                             />
                         </div>
                         <div className="space-y-2">
+                            <Label>Tim Developer</Label>
+                            <MultiSelect
+                                options={developers}
+                                selected={formData.developers}
+                                onChange={(selected) => setFormData({ ...formData, developers: selected })}
+                                placeholder="Pilih developer..."
+                            />
+                            <p className="text-[11px] text-slate-400">Developer yang dipilih akan memiliki akses penuh ke log aplikasi ini.</p>
+                        </div>
+                        <div className="space-y-2">
                             <Label htmlFor="email">Email Notifikasi (Opsional)</Label>
                             <Input
                                 id="email"
@@ -303,6 +341,15 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                 id="edit_desc"
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Tim Developer</Label>
+                            <MultiSelect
+                                options={developers}
+                                selected={formData.developers}
+                                onChange={(selected) => setFormData({ ...formData, developers: selected })}
+                                placeholder="kelola tim..."
                             />
                         </div>
                         <div className="space-y-2">
@@ -382,13 +429,6 @@ export function ManajemenAplikasi({ user }: { user: any }) {
   "metadata": {}
 }`}
                             </pre>
-                        </div>
-
-                        <div className="pt-4 border-t border-slate-800">
-                            <div className="flex gap-2 items-start text-xs text-slate-400">
-                                <AlertCircle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
-                                <p>Pastikan API Key dirahasiakan. Jangan pernah menaruhnya di kode frontend publik.</p>
-                            </div>
                         </div>
                     </CardContent>
                 </Card>

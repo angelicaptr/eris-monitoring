@@ -27,6 +27,7 @@ Route::middleware('web')->group(function () {
 
         // Manajemen Users (Admin Only)
         Route::apiResource('/dashboard/users', \App\Http\Controllers\UserController::class);
+        Route::get('/users/developers', [\App\Http\Controllers\UserController::class, 'getDevelopers']);
 
         // Global Settings (Admin Only)
         Route::get('/dashboard/settings', [\App\Http\Controllers\DashboardController::class, 'getSettings']);

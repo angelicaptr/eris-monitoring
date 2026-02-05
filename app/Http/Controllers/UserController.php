@@ -69,4 +69,22 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User berhasil dihapus']);
     }
+
+    public function getDevelopers()
+    {
+        $developers = \App\Models\User::all()
+            ->where('role', 'developer')
+            ->sortBy('name')
+            ->values()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'avatar_url' => $user->avatar_url,
+                ];
+            });
+
+        return response()->json($developers);
+    }
 }

@@ -17,4 +17,9 @@ class Application extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function developers()
+    {
+        return $this->belongsToMany(User::class, 'application_user');
+    }
 }

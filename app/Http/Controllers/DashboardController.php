@@ -9,19 +9,31 @@ use App\Models\ErrorLog;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil data nyata dari database yang barusan kamu buat
+        $user = $request->user();
+
+        $appQuery = Application::query();
+        $logQuery = ErrorLog::query();
+
+        if ($user->role === 'developer') {
+            // Filter apps assigned to this developer
+            $appIds = $user->applications()->pluck('applications.id');
+            $appQuery->whereIn('id', $appIds);
+            $logQuery->whereIn('application_id', $appIds);
+        }
+
         $stats = [
-            'total_errors' => ErrorLog::count(),
-            'critical_errors' => ErrorLog::where('severity', 'critical')->count(),
-            'resolved_today' => ErrorLog::where('status', 'resolved')->whereDate('updated_at', now())->count(),
-            'active_apps' => Application::count()
+            'total_errors' => $logQuery->count(),
+            'critical_errors' => (clone $logQuery)->where('severity', 'critical')->count(),
+            'resolved_today' => (clone $logQuery)->where('status', 'resolved')->whereDate('updated_at', now())->count(),
+            'active_apps' => $appQuery->count()
         ];
 
-        $trendData = collect([]); // Kosong dulu karena belum ada data harian
-        $severityData = collect([]); // Kosong dulu
-        $recentErrors = ErrorLog::with('application')->latest()->limit(5)->get();
+        $trendData = collect([]);
+        $severityData = collect([]);
+        // Recent errors also filtered
+        $recentErrors = (clone $logQuery)->with('application')->latest()->limit(5)->get();
 
         return view('dashboard.index', compact('stats', 'trendData', 'severityData', 'recentErrors'));
     }
@@ -64,15 +76,30 @@ class DashboardController extends Controller
     }
 
 
-    public function getLogs()
+    public function getLogs(Request $request)
     {
-        $logs = ErrorLog::with(['application', 'inProgressBy', 'resolvedBy'])->orderBy('created_at', 'desc')->get();
+        $query = ErrorLog::with(['application', 'inProgressBy', 'resolvedBy'])->orderBy('created_at', 'desc');
+
+        if ($request->user()->role === 'developer') {
+            $appIds = $request->user()->applications()->pluck('applications.id');
+            $query->whereIn('application_id', $appIds);
+        }
+
+        $logs = $query->get();
         return response()->json($logs);
     }
 
-    public function getApps()
+    public function getApps(Request $request)
     {
-        $apps = Application::all();
+        $query = Application::with('developers');
+
+        if ($request->user()->role === 'developer') {
+            $query->whereHas('developers', function ($q) use ($request) {
+                $q->where('users.id', $request->user()->id);
+            });
+        }
+
+        $apps = $query->get();
         return response()->json($apps);
     }
 
@@ -92,6 +119,10 @@ class DashboardController extends Controller
             'user_id' => $request->user() ? $request->user()->id : null,
         ]);
 
+        if ($request->has('developers')) {
+            $app->developers()->sync($request->developers);
+        }
+
         return response()->json($app, 201);
     }
 
@@ -109,6 +140,10 @@ class DashboardController extends Controller
             'description' => $request->description,
             'notification_email' => $request->notification_email,
         ]);
+
+        if ($request->has('developers')) {
+            $app->developers()->sync($request->developers);
+        }
 
         return response()->json($app);
     }
