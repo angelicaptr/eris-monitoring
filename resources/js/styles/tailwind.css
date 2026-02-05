@@ -1,0 +1,19 @@
+@import './fonts.css';
+@import './theme.css';
+@import "tailwindcss";
+
+/* NProgress Customization */
+#nprogress .bar {
+    background: #06b6d4 !important;
+    /* cyan-500 */
+    height: 3px !important;
+    box-shadow: 0 0 10px #06b6d4, 0 0 5px #06b6d4;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #06b6d4, 0 0 5px #06b6d4;
+}
+
+@source '../**/*.{js,ts,jsx,tsx}';
+
+@import 'tw-animate-css';
