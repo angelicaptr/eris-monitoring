@@ -107,7 +107,7 @@ export function MultiSelect({
                 <ScrollArea className="h-48">
                     <div className="p-1">
                         {filteredOptions.length === 0 ? (
-                            <div className="py-6 text-center text-sm text-slate-500">No results found.</div>
+                            <div className="py-6 text-center text-sm text-slate-500">Data tidak ditemukan.</div>
                         ) : (
                             filteredOptions.map((option) => (
                                 <div

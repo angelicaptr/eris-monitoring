@@ -50,11 +50,23 @@ export function AvatarStack({ users, limit = 3, className }: AvatarStackProps) {
             </TooltipProvider>
 
             {remaining > 0 && (
-                <div
-                    className="relative flex items-center justify-center -ml-3 h-8 w-8 rounded-full border-2 border-white bg-slate-100 text-[10px] font-medium text-slate-600 hover:bg-slate-200 hover:z-10 z-0"
-                >
-                    +{remaining}
-                </div>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <div
+                            className="relative flex items-center justify-center -ml-3 h-8 w-8 rounded-full border-2 border-white bg-slate-100 text-[10px] font-medium text-slate-600 hover:bg-slate-200 hover:z-10 z-0 cursor-default"
+                        >
+                            +{remaining}
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <div className="flex flex-col gap-1">
+                            <p className="font-semibold text-xs border-b pb-1 mb-1">+{remaining} Lainnya</p>
+                            {users.slice(limit).map((user) => (
+                                <p key={user.id} className="text-xs">{user.name}</p>
+                            ))}
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
             )}
         </div>
     )
