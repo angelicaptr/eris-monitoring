@@ -13,6 +13,10 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
+        if (!$user) {
+            return view('dashboard.index');
+        }
+
         $appQuery = Application::query();
         $logQuery = ErrorLog::query();
 
