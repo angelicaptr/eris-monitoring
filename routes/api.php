@@ -39,6 +39,12 @@ Route::middleware('web')->group(function () {
     Route::get('/dashboard/apps', [\App\Http\Controllers\DashboardController::class, 'getApps']); // Read-only list might be shared? assuming yes for context
     Route::get('/me', [\App\Http\Controllers\AuthController::class, 'me']);
 
+    // Analytics Routes (Shared)
+    Route::get('/analytics/summary', [\App\Http\Controllers\AnalitikController::class, 'getSummary']);
+    Route::get('/analytics/top-errors', [\App\Http\Controllers\AnalitikController::class, 'getTopErrors']);
+    Route::get('/analytics/app-comparison', [\App\Http\Controllers\AnalitikController::class, 'getAppComparison']);
+    Route::get('/analytics/severity-distribution', [\App\Http\Controllers\AnalitikController::class, 'getSeverityDistribution']);
+
     // Profile Updates
     Route::put('/user/profile', [\App\Http\Controllers\AuthController::class, 'updateProfile']);
     Route::put('/user/password', [\App\Http\Controllers\AuthController::class, 'updatePassword']);

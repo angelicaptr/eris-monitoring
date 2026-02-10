@@ -93,7 +93,7 @@ export function Beranda({ errors, user, isLoading = false }: BerandaProps) {
     }) + "." + date.getMilliseconds().toString().padStart(3, '0');
   };
 
-  // Stats & Chart Logic
+  // Stats & Chart Logic (Local Dashboard Logic)
   const stats = useMemo(() => {
     const last24Hours = errors.filter(
       (err) => err.timestamp.getTime() > Date.now() - 24 * 60 * 60 * 1000
@@ -102,7 +102,7 @@ export function Beranda({ errors, user, isLoading = false }: BerandaProps) {
     return {
       totalErrors: last24Hours.length,
       criticalErrors: last24Hours.filter((e) => e.severity === "critical").length,
-      errorRate: ((last24Hours.length / 10000) * 100).toFixed(2),
+      errorRate: last24Hours.length > 0 ? ((last24Hours.length / (last24Hours.length + 1000)) * 100).toFixed(2) : "0", // Dummy denominator for rate
       avgResponseTime: Math.floor(150 + Math.random() * 100),
       trend: (Math.random() - 0.5) * 20,
     };
@@ -144,7 +144,7 @@ export function Beranda({ errors, user, isLoading = false }: BerandaProps) {
 
       <Tabs defaultValue="line" className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-gray-800">Analisis Grafik</h3>
+          <h3 className="text-xl font-semibold text-gray-800">Analisis Grafik (24 Jam)</h3>
           <TabsList className="bg-white border border-gray-200 p-1 rounded-lg">
             <TabsTrigger value="line" className="rounded-md data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900">Grafik Garis</TabsTrigger>
             <TabsTrigger value="bar" className="rounded-md data-[state=active]:bg-gray-100 data-[state=active]:text-gray-900">Grafik Batang</TabsTrigger>
@@ -158,7 +158,7 @@ export function Beranda({ errors, user, isLoading = false }: BerandaProps) {
         </TabsContent>
       </Tabs>
 
-      {/* Live Stream Section (Replaces Error History) */}
+      {/* Live Stream Section */}
       <Card className="border-none shadow-md bg-white ring-1 ring-gray-200/60 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white">
           <div>

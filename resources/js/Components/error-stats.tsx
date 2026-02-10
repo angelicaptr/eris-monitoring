@@ -48,7 +48,7 @@ export function ErrorStats({ totalErrors, criticalErrors, errorRate, avgResponse
                         )}
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-500">Total Error (24h)</p>
+                        <p className="text-sm font-medium text-gray-500">Total Error</p>
                         <h2 className="text-3xl font-bold text-gray-900 mt-2">{totalErrors.toLocaleString()}</h2>
                     </div>
                 </CardContent>
@@ -76,9 +76,9 @@ export function ErrorStats({ totalErrors, criticalErrors, errorRate, avgResponse
                         </div>
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-500">Error Rate</p>
+                        <p className="text-sm font-medium text-gray-500">Resolution Rate</p>
                         <h2 className="text-3xl font-bold text-gray-900 mt-2">{errorRate}%</h2>
-                        <p className="text-xs text-gray-400 mt-1">of total requests</p>
+                        <p className="text-xs text-gray-400 mt-1">of total errors</p>
                     </div>
                 </CardContent>
             </Card>
@@ -91,8 +91,8 @@ export function ErrorStats({ totalErrors, criticalErrors, errorRate, avgResponse
                         </div>
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-500">Avg Response Time</p>
-                        <h2 className="text-3xl font-bold text-gray-900 mt-2">{avgResponseTime}ms</h2>
+                        <p className="text-sm font-medium text-gray-500">Avg Resolution Time</p>
+                        <h2 className="text-3xl font-bold text-gray-900 mt-2">{avgResponseTime}h</h2>
                     </div>
                 </CardContent>
             </Card>

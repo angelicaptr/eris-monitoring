@@ -18,6 +18,7 @@ import { KonfigurasiEmail } from "@/Pages/konfigurasi-email";
 import { DokumentasiAPI } from "@/Pages/dokumentasi-api";
 import { PusatArsip } from "@/Pages/pusat-arsip";
 import { Beranda } from "@/Pages/beranda";
+import { LaporanAnalitik } from "@/Pages/laporan-analitik";
 
 // Application Interface and Mock Data
 export interface Application {
@@ -250,6 +251,7 @@ export default function DashboardRoot() {
                     <Route path="/profil-pengguna" element={<ProfilPengguna user={user} />} />
                     <Route path="/konfigurasi-email" element={<KonfigurasiEmail />} />
                     <Route path="/dokumentasi-api" element={<DokumentasiAPI />} />
+                    <Route path="/laporan-analitik" element={<LaporanAnalitik user={user} />} />
 
                     {/* Fallback */}
                     <Route path="*" element={<Navigate to="/" replace />} />
