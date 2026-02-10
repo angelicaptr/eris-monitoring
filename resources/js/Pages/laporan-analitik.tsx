@@ -107,6 +107,7 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                         <SelectContent align="end">
                             <SelectItem value="7_days">7 Hari Terakhir</SelectItem>
                             <SelectItem value="30_days">30 Hari Terakhir</SelectItem>
+                            <SelectItem value="all_time">Semua Waktu</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

@@ -26,11 +26,12 @@ class AnalitikController extends Controller
         }
 
         // 2. Date Filtering
-        // We use explicit table name 'error_logs' to avoid ambiguity if we clone and join later.
+        // We use explicit table name 'error_logs' to avoid ambiguity.
         if ($range === '7_days') {
-            $logQuery->where('error_logs.created_at', '>=', now()->subDays(7));
+            // "7 Days" = Today + 6 previous days (Start of Day logic)
+            $logQuery->where('error_logs.created_at', '>=', now()->subDays(6)->startOfDay());
         } elseif ($range === '30_days') {
-            $logQuery->where('error_logs.created_at', '>=', now()->subDays(30));
+            $logQuery->where('error_logs.created_at', '>=', now()->subDays(29)->startOfDay());
         }
 
         // 3. Clone queries for specific counts to avoid resetting state
@@ -97,11 +98,10 @@ class AnalitikController extends Controller
         }
 
         // Date Filter
-        // Explicit table name to avoid ambiguity when joining applications (which also has created_at)
         if ($range === '7_days') {
-            $baseQuery->where('error_logs.created_at', '>=', now()->subDays(7));
+            $baseQuery->where('error_logs.created_at', '>=', now()->subDays(6)->startOfDay());
         } elseif ($range === '30_days') {
-            $baseQuery->where('error_logs.created_at', '>=', now()->subDays(30));
+            $baseQuery->where('error_logs.created_at', '>=', now()->subDays(29)->startOfDay());
         }
 
         if ($user->role === 'admin') {
@@ -144,9 +144,9 @@ class AnalitikController extends Controller
 
             // Date Filter
             if ($range === '7_days') {
-                $query->where('error_logs.created_at', '>=', now()->subDays(7));
+                $query->where('error_logs.created_at', '>=', now()->subDays(6)->startOfDay());
             } elseif ($range === '30_days') {
-                $query->where('error_logs.created_at', '>=', now()->subDays(30));
+                $query->where('error_logs.created_at', '>=', now()->subDays(29)->startOfDay());
             }
 
             $data = $query->groupBy('users.name')
@@ -164,9 +164,9 @@ class AnalitikController extends Controller
 
             // Date Filter
             if ($range === '7_days') {
-                $query->where('error_logs.created_at', '>=', now()->subDays(7));
+                $query->where('error_logs.created_at', '>=', now()->subDays(6)->startOfDay());
             } elseif ($range === '30_days') {
-                $query->where('error_logs.created_at', '>=', now()->subDays(30));
+                $query->where('error_logs.created_at', '>=', now()->subDays(29)->startOfDay());
             }
 
             $data = $query->groupBy('applications.app_name')
@@ -195,9 +195,9 @@ class AnalitikController extends Controller
 
         // Date Filter
         if ($range === '7_days') {
-            $query->where('error_logs.created_at', '>=', now()->subDays(7));
+            $query->where('error_logs.created_at', '>=', now()->subDays(6)->startOfDay());
         } elseif ($range === '30_days') {
-            $query->where('error_logs.created_at', '>=', now()->subDays(30));
+            $query->where('error_logs.created_at', '>=', now()->subDays(29)->startOfDay());
         }
 
         $data = $query->groupBy('severity')->get();

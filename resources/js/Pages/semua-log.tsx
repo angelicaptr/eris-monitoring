@@ -153,8 +153,8 @@ export function SemuaLog({ errors, applications, onViewDetails, onRefresh }: Sem
           <div className="flex justify-between items-center text-sm text-gray-600 px-1">
             <div>
               {(dateRange?.from || selectedSeverity !== "all" || selectedService !== "all" || searchQuery) && (
-                <span className="font-medium text-cyan-600">
-                  Filter aktif: {filteredErrors.length} hasil ditemukan
+                <span className="font-medium text-cyan-600 animate-in fade-in zoom-in duration-300">
+                  Ditemukan {filteredErrors.length} hasil
                 </span>
               )}
             </div>
