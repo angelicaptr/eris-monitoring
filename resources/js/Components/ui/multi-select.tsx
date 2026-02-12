@@ -59,7 +59,7 @@ export function MultiSelect({
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "w-full justify-between min-h-[10px] h-auto p-2 hover:bg-slate-50",
+                        "w-full justify-between min-h-[10px] h-auto p-2 hover:bg-slate-50 dark:bg-slate-950 dark:border-slate-800 dark:hover:bg-slate-900",
                         className
                     )}
                 >
@@ -73,7 +73,7 @@ export function MultiSelect({
                                 <Badge
                                     key={value}
                                     variant="secondary"
-                                    className="mr-1 mb-1 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 pl-1 pr-1 flex items-center gap-1 font-normal"
+                                    className="mr-1 mb-1 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 pl-1 pr-1 flex items-center gap-1 font-normal dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:border-slate-700"
                                 >
                                     {option.icon && <span className="mr-1">{option.icon}</span>}
                                     {option.label}
@@ -94,11 +94,11 @@ export function MultiSelect({
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0" align="start">
-                <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
+            <PopoverContent className="w-full p-0 dark:bg-slate-950 dark:border-slate-800" align="start">
+                <div className="flex items-center border-b px-3 dark:border-slate-800" cmdk-input-wrapper="">
                     <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
                     <input
-                        className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-100"
                         placeholder="Search..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -113,8 +113,8 @@ export function MultiSelect({
                                 <div
                                     key={option.value}
                                     className={cn(
-                                        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-slate-100 hover:text-slate-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-                                        selected.includes(option.value) ? "bg-slate-100" : ""
+                                        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-slate-100 hover:text-slate-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:hover:bg-slate-800 dark:hover:text-slate-100",
+                                        selected.includes(option.value) ? "bg-slate-100 dark:bg-slate-800" : ""
                                     )}
                                     onClick={() => handleSelect(option.value)}
                                 >
@@ -136,9 +136,9 @@ export function MultiSelect({
                     </div>
                 </ScrollArea>
                 {selected.length > 0 && (
-                    <div className="p-1 border-t border-slate-100">
+                    <div className="p-1 border-t border-slate-100 dark:border-slate-800">
                         <div
-                            className="text-xs text-center p-2 text-slate-500 hover:text-slate-900 cursor-pointer hover:bg-slate-50 rounded"
+                            className="text-xs text-center p-2 text-slate-500 hover:text-slate-900 cursor-pointer hover:bg-slate-50 rounded dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800"
                             onClick={() => onChange([])}
                         >
                             Clear selection

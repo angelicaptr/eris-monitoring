@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'logout',
             'api/dashboard/*', // Exclude dashboard APIs from CSRF
         ]);
+        $middleware->preventRequestsDuringMaintenance(except: [
+            'api/logs*', // Allow logs to be ingested during maintenance
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

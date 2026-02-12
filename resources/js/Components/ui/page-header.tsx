@@ -9,6 +9,8 @@ interface PageHeaderProps {
     iconBgColor?: string; // e.g. "bg-cyan-50", "bg-blue-50"
     children?: React.ReactNode; // For actions/buttons on the right
     className?: string;
+    titleClassName?: string;
+    descriptionClassName?: string;
 }
 
 export function PageHeader({
@@ -18,10 +20,12 @@ export function PageHeader({
     iconColor = "text-eris-indigo-600",
     iconBgColor = "bg-indigo-50",
     children,
-    className
+    className,
+    titleClassName,
+    descriptionClassName
 }: PageHeaderProps) {
     return (
-        <div className={cn("flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-100 mb-6", className)}>
+        <div className={cn("flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-100 dark:border-slate-800 mb-6", className)}>
             <div className="flex items-start gap-4">
                 {Icon && (
                     <div className={cn("p-3 rounded-xl flex items-center justify-center shrink-0 border border-transparent shadow-sm", iconBgColor)}>
@@ -29,11 +33,11 @@ export function PageHeader({
                     </div>
                 )}
                 <div className="space-y-1">
-                    <h2 className="text-3xl font-bold tracking-tight text-eris-indigo-600 leading-tight">
+                    <h2 className={cn("text-3xl font-bold tracking-tight text-eris-indigo-600 dark:text-indigo-400 leading-tight", titleClassName)}>
                         {title}
                     </h2>
                     {description && (
-                        <p className="text-sm text-slate-500 font-medium tracking-wide max-w-2xl leading-relaxed">
+                        <p className={cn("text-sm text-slate-500 font-medium tracking-wide max-w-2xl leading-relaxed", descriptionClassName)}>
                             {description}
                         </p>
                     )}

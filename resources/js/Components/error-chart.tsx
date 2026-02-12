@@ -33,11 +33,17 @@ interface ErrorChartProps {
         warning: number;
     }[];
     chartType: "line" | "bar";
+    onClick?: (hour: string) => void;
 }
 
-export function ErrorChart({ data, chartType }: ErrorChartProps) {
+import { useRef } from 'react';
+import { Chart } from 'chart.js';
+
+export function ErrorChart({ data, chartType, onClick }: ErrorChartProps) {
+    const chartRef = useRef<any>(null);
 
     const chartData = {
+        // ... (same as before)
         labels: data.map((d) => d.time),
         datasets: [
             {
@@ -70,6 +76,13 @@ export function ErrorChart({ data, chartType }: ErrorChartProps) {
     const options: any = {
         responsive: true,
         maintainAspectRatio: false,
+        onClick: (_evt: any, elements: any[]) => {
+            if (elements.length > 0 && onClick) {
+                const index = elements[0].index;
+                const hour = data[index].time;
+                onClick(hour);
+            }
+        },
         plugins: {
             legend: {
                 position: "top" as const,
@@ -87,7 +100,7 @@ export function ErrorChart({ data, chartType }: ErrorChartProps) {
                 }
             },
             tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
                 titleColor: '#1f2937',
                 bodyColor: '#4b5563',
                 borderColor: '#e5e7eb',
@@ -168,16 +181,16 @@ export function ErrorChart({ data, chartType }: ErrorChartProps) {
     };
 
     return (
-        <div className="w-full h-[400px] bg-white rounded-xl border border-slate-200/60 shadow-sm p-6">
+        <div className="w-full h-full p-2">
             <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Trend Error</h3>
-                <p className="text-sm text-gray-500">Visualisasi data error dalam 24 jam terakhir</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Statistik Harian</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400">Distribusi error per jam hari ini</p>
             </div>
             <div className="h-[320px] w-full">
                 {chartType === "line" ? (
-                    <Line data={chartData} options={options} />
+                    <Line ref={chartRef} data={chartData} options={options} />
                 ) : (
-                    <Bar data={chartData} options={options} />
+                    <Bar ref={chartRef} data={chartData} options={options} />
                 )}
             </div>
         </div>

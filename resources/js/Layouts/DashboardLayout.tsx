@@ -34,10 +34,10 @@ export function DashboardLayout({
     currentUser
 }: DashboardLayoutProps) {
     return (
-        <div className="flex h-screen overflow-hidden bg-eris-bg-light">
+        <div className="flex h-screen overflow-hidden bg-eris-bg-light dark:bg-slate-950 text-slate-800 dark:text-slate-100 print:h-auto print:overflow-visible print:bg-white">
             <Toaster position="bottom-right" richColors />
 
-            <div className="flex-shrink-0 h-full overflow-y-auto border-r border-slate-800 bg-eris-slate-950">
+            <div className="flex-shrink-0 h-full overflow-y-auto border-r border-slate-800 bg-eris-slate-950 dark:bg-slate-950 print:hidden">
                 <Sidebar
                     criticalCount={criticalCount}
                     userRole={userRole}
@@ -46,17 +46,19 @@ export function DashboardLayout({
             </div>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col h-full overflow-hidden">
-                <TopBar
-                    criticalErrors={criticalErrors}
-                    onMarkAsRead={onMarkAsRead}
-                    onMarkAllAsRead={onMarkAllAsRead}
-                    onLogout={onLogout}
-                />
+            <div className="flex-1 flex flex-col h-full overflow-hidden print:h-auto print:overflow-visible">
+                <div className="print:hidden">
+                    <TopBar
+                        criticalErrors={criticalErrors}
+                        onMarkAsRead={onMarkAsRead}
+                        onMarkAllAsRead={onMarkAllAsRead}
+                        onLogout={onLogout}
+                    />
+                </div>
 
                 {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto p-8 relative">
-                    <div className="max-w-7xl mx-auto pb-10">
+                <div className="flex-1 overflow-y-auto p-8 relative print:overflow-visible print:h-auto print:p-0">
+                    <div className="max-w-7xl mx-auto pb-10 print:max-w-none print:pb-0">
                         {children}
                     </div>
                 </div>

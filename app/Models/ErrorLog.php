@@ -19,12 +19,12 @@ class ErrorLog extends Model
         return $this->belongsTo(Application::class);
     }
 
-    public function inProgressBy()
+    public function inProgressUser()
     {
         return $this->belongsTo(User::class, 'in_progress_by');
     }
 
-    public function resolvedBy()
+    public function resolvedUser()
     {
         return $this->belongsTo(User::class, 'resolved_by');
     }

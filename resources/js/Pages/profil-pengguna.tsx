@@ -157,15 +157,15 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
       />
 
       {/* Header Profile Card - Horizontal Layout */}
-      <Card className="p-6 bg-white border-slate-200 shadow-sm relative overflow-hidden">
+      <Card className="p-6 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-eris-indigo-600 to-purple-600"></div>
         <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
           <div className="relative group cursor-pointer" onClick={triggerFileInput}>
-            <Avatar className="w-24 h-24 md:w-28 md:h-28 border-4 border-white shadow-lg ring-2 ring-slate-100 transition-all duration-300 group-hover:ring-eris-indigo-600">
+            <Avatar className="w-24 h-24 md:w-28 md:h-28 border-4 border-white dark:border-slate-800 shadow-lg ring-2 ring-slate-100 dark:ring-slate-700 transition-all duration-300 group-hover:ring-eris-indigo-600">
               {photoPreview ? (
                 <AvatarImage src={photoPreview} className="object-cover" />
               ) : null}
-              <AvatarFallback className="text-3xl bg-slate-900 text-white font-bold">
+              <AvatarFallback className="text-3xl bg-slate-900 dark:bg-slate-950 text-white font-bold">
                 {profileData.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -192,24 +192,24 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
 
           <div className="flex-1 text-center md:text-left space-y-2">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">{profileData.name}</h2>
-              <p className="text-slate-500 font-medium">{profileData.email}</p>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{profileData.name}</h2>
+              <p className="text-slate-500 dark:text-slate-400 font-medium">{profileData.email}</p>
             </div>
             <div className="flex items-center justify-center md:justify-start gap-3 pt-1">
-              <div className="px-3 py-1 rounded-full bg-indigo-50 text-eris-indigo-600 text-xs font-bold uppercase tracking-wider border border-indigo-100 flex items-center gap-1.5">
+              <div className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-eris-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider border border-indigo-100 dark:border-indigo-800 flex items-center gap-1.5">
                 <Shield className="w-3 h-3" />
                 {profileData.role}
               </div>
-              <div className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold uppercase tracking-wider border border-slate-200">
+              <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider border border-slate-200 dark:border-slate-700">
                 Active
               </div>
             </div>
           </div>
 
-          <div className="hidden md:block pr-8 border-l border-slate-100 pl-8">
+          <div className="hidden md:block pr-8 border-l border-slate-100 dark:border-slate-800 pl-8">
             <div className="text-right space-y-1">
               <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold">Member Since</p>
-              <p className="text-sm font-medium text-slate-700">January 2026</p>
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-200">January 2026</p>
             </div>
           </div>
         </div>
@@ -218,14 +218,14 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
       {/* Main Content Grid - Side by Side */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Edit Profile Form */}
-        <Card className="p-6 border-slate-200 shadow-sm h-full flex flex-col">
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+        <Card className="p-6 border-slate-200 dark:border-slate-800 shadow-sm h-full flex flex-col dark:bg-slate-900/50">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg">
               <User className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900">Informasi Pribadi</h3>
-              <p className="text-xs text-slate-500">Perbarui identitas akun anda</p>
+              <h3 className="font-bold text-slate-900 dark:text-white">Informasi Pribadi</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Perbarui identitas akun anda</p>
             </div>
           </div>
 
@@ -238,7 +238,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
                   value={profileData.name}
                   onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                   disabled={isProfileLoading}
-                  className="bg-slate-50 border-slate-200 focus:bg-white transition-colors"
+                  className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                 />
               </div>
 
@@ -250,7 +250,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
                   value={profileData.email}
                   onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                   disabled={isProfileLoading}
-                  className="bg-slate-50 border-slate-200 focus:bg-white transition-colors"
+                  className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-colors"
                 />
               </div>
 
@@ -261,7 +261,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
                     id="role"
                     value={profileData.role}
                     disabled
-                    className="bg-slate-100 text-slate-500 font-medium border-slate-200 pl-9"
+                    className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium border-slate-200 dark:border-slate-700 pl-9"
                   />
                   <Shield className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 </div>
@@ -272,7 +272,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
             </div>
 
             <div className="pt-4 mt-auto">
-              <Button type="submit" disabled={isProfileLoading} className="w-full bg-slate-900 hover:bg-slate-800 text-white">
+              <Button type="submit" disabled={isProfileLoading} className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700 text-white">
                 {isProfileLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {!isProfileLoading && <Save className="w-4 h-4 mr-2" />}
                 Simpan Perubahan
@@ -282,14 +282,14 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
         </Card>
 
         {/* Change Password Form */}
-        <Card className="p-6 border-slate-200 shadow-sm h-full flex flex-col">
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-            <div className="p-2 bg-orange-50 text-orange-600 rounded-lg">
+        <Card className="p-6 border-slate-200 dark:border-slate-800 shadow-sm h-full flex flex-col bg-white dark:bg-slate-900/50">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="p-2 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg">
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900">Keamanan</h3>
-              <p className="text-xs text-slate-500">Lindungi akun dengan password kuat</p>
+              <h3 className="font-bold text-slate-900 dark:text-white">Keamanan</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Lindungi akun dengan password kuat</p>
             </div>
           </div>
 
@@ -371,7 +371,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
             </div>
 
             <div className="pt-4 mt-auto">
-              <Button type="submit" disabled={isPasswordLoading} variant="outline" className="w-full border-orange-200 text-orange-700 hover:bg-orange-50 hover:text-orange-800">
+              <Button type="submit" disabled={isPasswordLoading} variant="outline" className="w-full border-orange-200 text-orange-700 hover:bg-orange-50 hover:text-orange-800 dark:border-orange-900/50 dark:text-orange-400 dark:hover:bg-orange-900/20 dark:hover:text-orange-300">
                 {isPasswordLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {!isPasswordLoading && <Lock className="w-4 h-4 mr-2" />}
                 Update Password

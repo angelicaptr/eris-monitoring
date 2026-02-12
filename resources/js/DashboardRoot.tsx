@@ -108,9 +108,9 @@ export default function DashboardRoot() {
                     resolved: log.status === 'resolved',
                     status: log.status,
                     resolvedAt: log.resolved_at ? new Date(log.resolved_at) : undefined,
-                    resolvedBy: log.resolved_by || log.resolvedBy, // Check both snake_case (Laravel default) and camelCase
+                    resolvedBy: log.resolved_user || null,
                     inProgressAt: log.in_progress_at ? new Date(log.in_progress_at) : undefined,
-                    inProgressBy: log.in_progress_by || log.inProgressBy, // Check both snake_case and camelCase
+                    inProgressBy: log.in_progress_user || null,
                     metadata: log.metadata || {},
                 }));
                 // Sort by timestamp desc
@@ -138,6 +138,20 @@ export default function DashboardRoot() {
             })
             .catch((error: any) => console.error("Gagal ambil data aplikasi:", error));
     }
+
+    // Fetch Developers (Admin Only)
+    const [developers, setDevelopers] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (user?.role === 'admin') {
+            (window as any).axios.get('/api/users/developers')
+                .then((res: any) => {
+                    const data = Array.isArray(res.data) ? res.data : Object.values(res.data);
+                    setDevelopers(data);
+                })
+                .catch((err: any) => console.error("Failed to fetch developers:", err));
+        }
+    }, [user]);
 
     // 2. Effects
     useEffect(() => {
@@ -244,7 +258,7 @@ export default function DashboardRoot() {
                     <Route path="/" element={<Beranda errors={errors} onViewDetails={handleViewDetails} user={user} isLoading={isLogsLoading} />} />
                     <Route path="/beranda" element={<Navigate to="/" replace />} />
 
-                    <Route path="/semua-log" element={<SemuaLog errors={errors} applications={applications} onViewDetails={handleViewDetails} onRefresh={handleRefresh} />} />
+                    <Route path="/semua-log" element={<SemuaLog errors={errors} applications={applications} developers={developers} user={user} onViewDetails={handleViewDetails} onRefresh={handleRefresh} />} />
                     <Route path="/pusat-arsip" element={<PusatArsip />} />
                     <Route path="/manajemen-aplikasi" element={<ManajemenAplikasi user={user} />} />
                     <Route path="/manajemen-pengguna" element={<ManajemenPengguna />} />

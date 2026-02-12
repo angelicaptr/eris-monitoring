@@ -43,12 +43,35 @@ class DashboardController extends Controller
     }
     public function updateLogStatus(Request $request, $id)
     {
-        $log = ErrorLog::findOrFail($id);
+        $log = ErrorLog::with(['inProgressUser', 'resolvedUser'])->findOrFail($id);
         $status = $request->input('status');
         $user = $request->user();
 
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // --- Access Control Logic ---
+        if ($status === 'open') {
+            if ($user->role === 'developer') {
+                if (
+                    ($log->in_progress_by && $log->in_progress_by !== $user->id) ||
+                    ($log->resolved_by && $log->resolved_by !== $user->id)
+                ) {
+                    return response()->json(['message' => 'Log ini sedang dikerjakan orang lain.'], 403);
+                }
+            }
+            // Admin allowed.
+        } else {
+            // in_progress or resolved
+            if (
+                ($log->in_progress_by && $log->in_progress_by !== $user->id) ||
+                ($log->resolved_by && $log->resolved_by !== $user->id)
+            ) {
+                $claimer = $log->inProgressUser ?? $log->resolvedUser;
+                $claimerName = $claimer ? $claimer->name : 'Unknown';
+                return response()->json(['message' => 'Dikerjakan/Klaim oleh ' . $claimerName], 403);
+            }
         }
 
         if ($status === 'in_progress') {
@@ -75,18 +98,21 @@ class DashboardController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Status updated', 'log' => $log->load('inProgressBy', 'resolvedBy', 'application')]);
-
+        return response()->json(['message' => 'Status updated', 'log' => $log->load('inProgressUser', 'resolvedUser', 'application')]);
     }
 
 
     public function getLogs(Request $request)
     {
-        $query = ErrorLog::with(['application', 'inProgressBy', 'resolvedBy'])->orderBy('created_at', 'desc');
+        $query = ErrorLog::with(['application', 'inProgressUser', 'resolvedUser'])->orderBy('created_at', 'desc');
 
         if ($request->user()->role === 'developer') {
             $appIds = $request->user()->applications()->pluck('applications.id');
             $query->whereIn('application_id', $appIds);
+        }
+
+        if ($request->has('limit')) {
+            $query->limit($request->input('limit'));
         }
 
         $logs = $query->get();
@@ -111,13 +137,11 @@ class DashboardController extends Controller
     {
         $request->validate([
             'app_name' => 'required|string|max:255',
-            'notification_email' => 'nullable|email',
         ]);
 
         $app = Application::create([
             'app_name' => $request->app_name,
             'description' => $request->description,
-            'notification_email' => $request->notification_email,
             'api_key' => \Illuminate\Support\Str::random(32),
             'is_active' => true,
             'user_id' => $request->user() ? $request->user()->id : null,
@@ -136,13 +160,11 @@ class DashboardController extends Controller
 
         $request->validate([
             'app_name' => 'required|string|max:255',
-            'notification_email' => 'nullable|email',
         ]);
 
         $app->update([
             'app_name' => $request->app_name,
             'description' => $request->description,
-            'notification_email' => $request->notification_email,
         ]);
 
         if ($request->has('developers')) {
@@ -177,5 +199,107 @@ class DashboardController extends Controller
         );
 
         return response()->json(['message' => 'Settings updated']);
+    }
+
+    public function bulkUpdateStatus(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:error_logs,id',
+            'status' => 'required|in:open,in_progress,resolved',
+        ]);
+
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $status = $request->status;
+
+        // --- Access Control Logic ---
+        $logs = ErrorLog::whereIn('id', $request->ids)->get();
+        foreach ($logs as $log) {
+            // Admin can always force 'open', but if setting to in_progress/resolved, must respect existing claims?
+            // Requirement: "admin punya akses untuk balikin log itu kembali ke open (tapi tetap gapunya akses untuk resolved/inprogress)"
+            // So Admin acts like Developer for 'in_progress' and 'resolved', but has superpower for 'open'.
+
+            if ($status === 'open') {
+                if ($user->role !== 'admin' && $user->role !== 'developer') { // Should not happen if middleware is set, but just in case
+                    return response()->json(['message' => 'Unauthorized'], 403);
+                }
+                // Developer can only return to open if they own it? Or if it's their app?
+                // Usually developer can un-claim their own task.
+                if ($user->role === 'developer') {
+                    // If claimed by someone else, Dev cannot unclaim it.
+                    if (
+                        ($log->in_progress_by && $log->in_progress_by !== $user->id) ||
+                        ($log->resolved_by && $log->resolved_by !== $user->id)
+                    ) {
+                        $log->load(['inProgressUser', 'resolvedUser']);
+                        $claimer = $log->inProgressUser ?? $log->resolvedUser;
+                        $claimerName = $claimer ? $claimer->name : 'User Lain';
+                        return response()->json(['message' => "Gagal: Log #{$log->id} sedang dikerjakan oleh {$claimerName}."], 403);
+                    }
+                }
+                // Admin can always set to open.
+            } else {
+                // Status is 'in_progress' or 'resolved'
+                // Check if already claimed by someone else
+                if (
+                    ($log->in_progress_by && $log->in_progress_by !== $user->id) ||
+                    ($log->resolved_by && $log->resolved_by !== $user->id)
+                ) {
+                    $claimer = $log->inProgressUser ?? $log->resolvedUser;
+                    $claimerName = $claimer ? $claimer->name : 'Unknown';
+                    return response()->json(['message' => 'Log sedang dikerjakan/klaim oleh ' . $claimerName], 403);
+                }
+            }
+        }
+
+        $updateData = ['status' => $status];
+
+        if ($status === 'in_progress') {
+            $updateData['in_progress_by'] = $user->id;
+            $updateData['in_progress_at'] = now();
+            // Clear resolved if moving back to in_progress? Yes.
+            $updateData['resolved_at'] = null;
+            $updateData['resolved_by'] = null;
+        } elseif ($status === 'resolved') {
+            $updateData['resolved_by'] = $user->id;
+            $updateData['resolved_at'] = now();
+            // Keep in_progress info? Usually yes, to know who started it. 
+            // But if resolved_by is different from in_progress_by? 
+            // The logic above ensures only the claimer can resolve.
+            // But wait, if 'open' -> 'resolved' directly? 
+            // Then in_progress is null.
+        } elseif ($status === 'open') {
+            $updateData['in_progress_by'] = null;
+            $updateData['in_progress_at'] = null;
+            $updateData['resolved_by'] = null;
+            $updateData['resolved_at'] = null;
+        }
+
+        ErrorLog::whereIn('id', $request->ids)->update($updateData);
+
+        return response()->json(['message' => 'Bulk status updated']);
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:error_logs,id',
+        ]);
+
+        $user = $request->user();
+
+        if (!$user || $user->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        ErrorLog::whereIn('id', $request->ids)->delete();
+
+        return response()->json(['message' => 'Bulk delete successful']);
     }
 }

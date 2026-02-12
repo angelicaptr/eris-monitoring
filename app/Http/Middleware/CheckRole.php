@@ -19,7 +19,13 @@ class CheckRole
             return response()->json(['message' => 'Unauthenticated.'], 401);
         }
 
-        if (!in_array($request->user()->role, $roles)) {
+        // Handle pipe-separated roles (e.g. role:admin|developer)
+        $allowedRoles = [];
+        foreach ($roles as $role) {
+            $allowedRoles = array_merge($allowedRoles, explode('|', $role));
+        }
+
+        if (!in_array($request->user()->role, $allowedRoles)) {
             return response()->json(['message' => 'Akses ditolak. Role anda: ' . $request->user()->role], 403);
         }
         return $next($request);

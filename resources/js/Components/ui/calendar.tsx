@@ -41,30 +41,30 @@ function Calendar({
                     nav_button_next: "absolute right-1",
                     table: "border-collapse space-x-1",
                     head_row: "",
-                    head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
+                    head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem] dark:text-slate-400",
                     row: "mt-2",
                     cell: cn(
-                        "relative text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-range-end)]:rounded-r-md",
+                        "relative text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-range-end)]:rounded-r-md dark:[&:has([aria-selected])]:bg-slate-800",
                         props.mode === "range"
                             ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
                             : "[&:has([aria-selected])]:rounded-md",
                     ),
                     day: cn(
                         buttonVariants({ variant: "ghost" }),
-                        "size-8 p-0 font-normal aria-selected:opacity-100",
+                        "size-8 p-0 font-normal aria-selected:opacity-100 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-100",
                     ),
                     day_range_start:
-                        "day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground",
+                        "day-range-start aria-selected:bg-indigo-600 aria-selected:text-white dark:aria-selected:bg-indigo-600 dark:aria-selected:text-white",
                     day_range_end:
-                        "day-range-end aria-selected:bg-primary aria-selected:text-primary-foreground",
+                        "day-range-end aria-selected:bg-indigo-600 aria-selected:text-white dark:aria-selected:bg-indigo-600 dark:aria-selected:text-white",
                     day_selected:
-                        "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-                    day_today: "bg-accent text-accent-foreground",
+                        "bg-indigo-600 text-white hover:bg-indigo-600 hover:text-white focus:bg-indigo-600 focus:text-white dark:bg-indigo-600 dark:text-white",
+                    day_today: "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100",
                     day_outside:
-                        "day-outside text-muted-foreground aria-selected:text-muted-foreground",
-                    day_disabled: "text-muted-foreground opacity-50",
+                        "day-outside text-muted-foreground aria-selected:text-muted-foreground opacity-50 dark:text-slate-500",
+                    day_disabled: "text-muted-foreground opacity-50 dark:text-slate-600",
                     day_range_middle:
-                        "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                        "aria-selected:bg-indigo-50 aria-selected:text-indigo-900 dark:aria-selected:bg-indigo-900/30 dark:aria-selected:text-indigo-100",
                     day_hidden: "invisible",
                     ...classNames,
                 }}

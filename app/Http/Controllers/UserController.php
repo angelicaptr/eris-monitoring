@@ -83,7 +83,8 @@ class UserController extends Controller
                     'email' => $user->email,
                     'avatar_url' => $user->avatar_url,
                 ];
-            });
+            })
+            ->values(); // Ensure indexed array for JSON
 
         return response()->json($developers);
     }

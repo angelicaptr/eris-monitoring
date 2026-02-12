@@ -2,6 +2,7 @@ import './styles/index.css';
 import { createRoot } from 'react-dom/client';
 import DashboardRoot from './DashboardRoot';
 import React from 'react';
+import { ThemeProvider } from 'next-themes';
 
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean, error: any }> {
     constructor(props: any) {
@@ -59,8 +60,10 @@ import { BrowserRouter } from 'react-router-dom';
 const root = createRoot(document.getElementById('root')!);
 root.render(
     <ErrorBoundary>
-        <BrowserRouter>
-            <DashboardRoot />
-        </BrowserRouter>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <BrowserRouter>
+                <DashboardRoot />
+            </BrowserRouter>
+        </ThemeProvider>
     </ErrorBoundary>
 );

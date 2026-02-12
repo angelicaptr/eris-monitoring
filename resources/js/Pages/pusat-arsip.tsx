@@ -57,16 +57,18 @@ export function PusatArsip() {
                 title="Pusat Arsip & Retensi Data"
                 description="Repositori laporan historis dan data mentah triwulanan."
                 icon={Archive}
+                titleClassName="dark:text-white"
+                descriptionClassName="dark:text-slate-400"
             />
 
-            <Card className="border-cyan-100 bg-cyan-50/50">
+            <Card className="border-cyan-100 bg-cyan-50/50 dark:bg-cyan-950/20 dark:border-cyan-900/50">
                 <div className="p-6 flex items-start gap-4">
-                    <div className="p-2 bg-white rounded-lg border border-cyan-100 shadow-sm">
-                        <Archive className="w-6 h-6 text-cyan-500" />
+                    <div className="p-2 bg-white dark:bg-cyan-900/30 rounded-lg border border-cyan-100 dark:border-cyan-800 shadow-sm">
+                        <Archive className="w-6 h-6 text-cyan-500 dark:text-cyan-400" />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-cyan-900 mb-1">Strategi Retensi Data (3 Bulan)</h3>
-                        <p className="text-sm text-cyan-700/80 leading-relaxed max-w-3xl">
+                        <h3 className="font-semibold text-cyan-900 dark:text-cyan-200 mb-1">Strategi Retensi Data (3 Bulan)</h3>
+                        <p className="text-sm text-cyan-700/80 dark:text-cyan-300/80 leading-relaxed max-w-3xl">
                             Untuk menjaga performa sistem tetap optimal, data log aktif ("Live Data") dibatasi hanya untuk periode
                             <strong> 3 bulan terakhir</strong>. Data yang lebih lama secara otomatis diarsipkan ke dalam format PDF dan Excel di halaman ini.
                         </p>
@@ -74,13 +76,13 @@ export function PusatArsip() {
                 </div>
             </Card>
 
-            <Card>
+            <Card className="dark:bg-slate-900/50 dark:border-slate-800">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-gray-500" />
+                    <CardTitle className="flex items-center gap-2 dark:text-slate-100">
+                        <Calendar className="w-5 h-5 text-gray-500 dark:text-slate-400" />
                         Daftar Arsip Triwulan
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="dark:text-slate-400">
                         Unduh laporan analitik strategis atau raw data untuk keperluan audit.
                     </CardDescription>
                 </CardHeader>
@@ -88,10 +90,10 @@ export function PusatArsip() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-slate-50 hover:bg-slate-50">
-                                    <TableHead className="w-[30%]">Periode Laporan</TableHead>
-                                    <TableHead>Waktu Generate</TableHead>
-                                    <TableHead className="text-right">File Arsip (Raw Data)</TableHead>
+                                <TableRow className="bg-slate-50 hover:bg-slate-50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800">
+                                    <TableHead className="w-[30%] dark:text-slate-300 font-semibold">Periode Laporan</TableHead>
+                                    <TableHead className="dark:text-slate-300 font-semibold">Waktu Generate</TableHead>
+                                    <TableHead className="text-right dark:text-slate-300 font-semibold">File Arsip (Raw Data)</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -105,11 +107,11 @@ export function PusatArsip() {
                                     <TableRow>
                                         <TableCell colSpan={3} className="h-64 text-center">
                                             <div className="flex flex-col items-center justify-center gap-3">
-                                                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
-                                                    <Archive className="w-8 h-8 text-slate-300" />
+                                                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
+                                                    <Archive className="w-8 h-8 text-slate-300 dark:text-slate-600" />
                                                 </div>
-                                                <div className="text-slate-900 font-medium">Belum ada arsip tersedia</div>
-                                                <p className="text-slate-500 text-sm max-w-xs">
+                                                <div className="text-slate-900 dark:text-slate-200 font-medium">Belum ada arsip tersedia</div>
+                                                <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xs">
                                                     Data arsip log lama akan muncul di sini.
                                                 </p>
                                             </div>
@@ -117,11 +119,11 @@ export function PusatArsip() {
                                     </TableRow>
                                 ) : (
                                     archives.map((archive) => (
-                                        <TableRow key={archive.id} className="group hover:bg-slate-50/50 transition-colors">
-                                            <TableCell className="font-medium text-slate-900 text-base">
+                                        <TableRow key={archive.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors border-slate-200 dark:border-slate-800">
+                                            <TableCell className="font-medium text-slate-900 dark:text-slate-100 text-base">
                                                 {archive.periode}
                                             </TableCell>
-                                            <TableCell className="text-slate-500 text-sm font-mono">
+                                            <TableCell className="text-slate-500 dark:text-slate-400 text-sm font-mono">
                                                 {formatDate(archive.generated_at)}
                                             </TableCell>
                                             <TableCell className="text-right">
@@ -131,7 +133,7 @@ export function PusatArsip() {
                                                     <Button
                                                         variant="outline"
                                                         size="sm"
-                                                        className="gap-2 text-green-700 hover:text-green-800 hover:bg-green-50 border-green-200 shadow-sm hover:shadow transition-all"
+                                                        className="gap-2 text-green-700 hover:text-green-800 hover:bg-green-50 border-green-200 shadow-sm hover:shadow transition-all dark:bg-transparent dark:border-green-800 dark:text-green-400 dark:hover:bg-green-900/20"
                                                         onClick={() => handleDownload(archive.id, 'excel')}
                                                     >
                                                         <FileSpreadsheet className="w-4 h-4" />

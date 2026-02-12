@@ -42,10 +42,10 @@ export function DokumentasiAPI() {
             <div>
               <Label>Base URL</Label>
               <div className="flex gap-2 mt-1">
-                <code className="flex-1 bg-slate-950 text-cyan-400 px-4 py-2 rounded font-mono text-sm border border-slate-200">
+                <code className="flex-1 bg-slate-950 text-cyan-400 px-4 py-2 rounded font-mono text-sm border border-slate-800">
                   {endpointUrl}
                 </code>
-                <Button variant="outline" size="sm" onClick={() => handleCopy(endpointUrl)}>
+                <Button variant="outline" size="sm" onClick={() => handleCopy(endpointUrl)} className="dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-800">
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
@@ -59,13 +59,13 @@ export function DokumentasiAPI() {
             <div>
               <Label>Headers Wajib</Label>
               <div className="mt-2 space-y-2 font-mono text-sm">
-                <div className="flex items-center justify-between bg-slate-100 p-2 rounded">
-                  <span className="text-slate-600">Content-Type</span>
-                  <span className="font-bold text-slate-900">application/json</span>
+                <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-900 p-2 rounded">
+                  <span className="text-slate-600 dark:text-slate-400">Content-Type</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-200">application/json</span>
                 </div>
-                <div className="flex items-center justify-between bg-slate-100 p-2 rounded border-l-4 border-cyan-500">
-                  <span className="text-slate-600">X-API-KEY</span>
-                  <span className="font-bold text-slate-900">YOUR_API_KEY</span>
+                <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-900 p-2 rounded border-l-4 border-cyan-500">
+                  <span className="text-slate-600 dark:text-slate-400">X-API-KEY</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-200">YOUR_API_KEY</span>
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@ requests.post(
         </Tabs>
       </Card>
 
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex gap-3 text-yellow-800 text-sm">
+      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900 rounded-lg p-4 flex gap-3 text-yellow-800 dark:text-yellow-200 text-sm">
         <AlertCircle className="w-5 h-5 shrink-0" />
         <p>
           <strong>Keamanan:</strong> Jangan pernah mengekspos API Key di kode frontend yang dapat diakses publik (client-side).

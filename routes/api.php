@@ -49,9 +49,16 @@ Route::middleware('web')->group(function () {
     Route::put('/user/profile', [\App\Http\Controllers\AuthController::class, 'updateProfile']);
     Route::put('/user/password', [\App\Http\Controllers\AuthController::class, 'updatePassword']);
 
-    // --- KHUSUS UPDATE STATUS (Developer Only) ---
+    // --- KHUSUS UPDATE STATUS (Developer Only + Admin if needed, or shared) ---
+    // Make bulk status shared for now, or restrict. Usually Devs can update status.
+    Route::patch('/dashboard/logs/bulk-status', [\App\Http\Controllers\DashboardController::class, 'bulkUpdateStatus']);
+
+    // Bulk Delete (Admin Only) - Moved here or explicit check in controller
+    Route::delete('/dashboard/logs/bulk-delete', [\App\Http\Controllers\DashboardController::class, 'bulkDelete'])
+        ->middleware('role:admin');
+
     Route::patch('/dashboard/logs/{id}/status', [\App\Http\Controllers\DashboardController::class, 'updateLogStatus'])
-        ->middleware('role:developer');
+        ->middleware('role:admin|developer');
 });
 
 
