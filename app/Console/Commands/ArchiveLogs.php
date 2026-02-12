@@ -6,9 +6,6 @@ use Illuminate\Console\Command;
 use App\Models\ErrorLog;
 use App\Models\Archive;
 use Illuminate\Support\Facades\Storage;
-// Assuming these facades will be available once packages are installed
-use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class ArchiveLogs extends Command
