@@ -10,9 +10,10 @@ import { PageHeader } from "@/Components/ui/page-header";
 
 interface ProfilPenggunaProps {
   user: any;
+  onUpdateUser?: () => void;
 }
 
-export function ProfilPengguna({ user }: ProfilPenggunaProps) {
+export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const formatRole = (role: string) => {
@@ -65,6 +66,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
     })
       .then(() => {
         toast.success("Profil berhasil diperbarui!");
+        if (onUpdateUser) onUpdateUser();
       })
       .catch((err: any) => {
         toast.error(err.response?.data?.message || "Gagal memperbarui profil");
@@ -133,7 +135,7 @@ export function ProfilPengguna({ user }: ProfilPenggunaProps) {
     })
       .then(() => {
         toast.success("Foto profil berhasil diperbarui!");
-        // TODO: Sync with global user state
+        if (onUpdateUser) onUpdateUser();
       })
       .catch((err: any) => {
         console.error("Upload error", err);

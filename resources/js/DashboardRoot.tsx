@@ -153,9 +153,8 @@ export default function DashboardRoot() {
         }
     }, [user]);
 
-    // 2. Effects
-    useEffect(() => {
-        // Check session on mount
+    // Fetch User Function
+    const fetchUser = () => {
         (window as any).axios.get('/api/me')
             .then((res: any) => {
                 setUser(res.data);
@@ -165,6 +164,12 @@ export default function DashboardRoot() {
                 setUser(null);
                 setIsAuthLoading(false);
             });
+    };
+
+    // 2. Effects
+    useEffect(() => {
+        // Check session on mount
+        fetchUser();
 
         // Fetch data on mount
         fetchLogs();
@@ -262,7 +267,7 @@ export default function DashboardRoot() {
                     <Route path="/pusat-arsip" element={<PusatArsip />} />
                     <Route path="/manajemen-aplikasi" element={<ManajemenAplikasi user={user} />} />
                     <Route path="/manajemen-pengguna" element={<ManajemenPengguna />} />
-                    <Route path="/profil-pengguna" element={<ProfilPengguna user={user} />} />
+                    <Route path="/profil-pengguna" element={<ProfilPengguna user={user} onUpdateUser={fetchUser} />} />
                     <Route path="/konfigurasi-email" element={<KonfigurasiEmail />} />
                     <Route path="/dokumentasi-api" element={<DokumentasiAPI />} />
                     <Route path="/laporan-analitik" element={<LaporanAnalitik user={user} />} />
