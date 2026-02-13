@@ -29,8 +29,8 @@ export function PusatArsip() {
                 setLoading(false);
             })
             .catch((err: any) => {
-                console.error("Gagal memuat arsip", err);
-                toast.error("Gagal memuat data arsip");
+                console.error("Failed to load archives", err);
+                toast.error("Failed to load archive data");
                 setLoading(false);
             });
     };
@@ -42,7 +42,7 @@ export function PusatArsip() {
     };
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('id-ID', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
@@ -54,8 +54,8 @@ export function PusatArsip() {
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             <PageHeader
-                title="Pusat Arsip & Retensi Data"
-                description="Repositori laporan historis dan data mentah triwulanan."
+                title="Archive Center & Data Retention"
+                description="Repository of historical reports and quarterly raw data."
                 icon={Archive}
                 titleClassName="dark:text-white"
                 descriptionClassName="dark:text-slate-400"
@@ -67,10 +67,10 @@ export function PusatArsip() {
                         <Archive className="w-6 h-6 text-cyan-500 dark:text-cyan-400" />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-cyan-900 dark:text-cyan-200 mb-1">Strategi Retensi Data (3 Bulan)</h3>
+                        <h3 className="font-semibold text-cyan-900 dark:text-cyan-200 mb-1">Data Retention Strategy (3 Months)</h3>
                         <p className="text-sm text-cyan-700/80 dark:text-cyan-300/80 leading-relaxed max-w-3xl">
-                            Untuk menjaga performa sistem tetap optimal, data log aktif ("Live Data") dibatasi hanya untuk periode
-                            <strong> 3 bulan terakhir</strong>. Data yang lebih lama secara otomatis diarsipkan ke dalam format PDF dan Excel di halaman ini.
+                            To maintain optimal system performance, active log data ("Live Data") is limited to the
+                            <strong> last 3 months</strong>. Older data is automatically archived into PDF and Excel formats on this page.
                         </p>
                     </div>
                 </div>
@@ -80,10 +80,10 @@ export function PusatArsip() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 dark:text-slate-100">
                         <Calendar className="w-5 h-5 text-gray-500 dark:text-slate-400" />
-                        Daftar Arsip Triwulan
+                        Quarterly Archive List
                     </CardTitle>
                     <CardDescription className="dark:text-slate-400">
-                        Unduh laporan analitik strategis atau raw data untuk keperluan audit.
+                        Download strategic analytic reports or raw data for audit purposes.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -91,16 +91,16 @@ export function PusatArsip() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-slate-50 hover:bg-slate-50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800">
-                                    <TableHead className="w-[30%] dark:text-slate-300 font-semibold">Periode Laporan</TableHead>
-                                    <TableHead className="dark:text-slate-300 font-semibold">Waktu Generate</TableHead>
-                                    <TableHead className="text-right dark:text-slate-300 font-semibold">File Arsip (Raw Data)</TableHead>
+                                    <TableHead className="w-[30%] dark:text-slate-300 font-semibold">Report Period</TableHead>
+                                    <TableHead className="dark:text-slate-300 font-semibold">Generated Time</TableHead>
+                                    <TableHead className="text-right dark:text-slate-300 font-semibold">Archive File (Raw Data)</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {loading ? (
                                     <TableRow>
                                         <TableCell colSpan={3} className="h-24 text-center text-gray-500">
-                                            Memuat data arsip...
+                                            Loading archive data...
                                         </TableCell>
                                     </TableRow>
                                 ) : archives.length === 0 ? (
@@ -110,9 +110,9 @@ export function PusatArsip() {
                                                 <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
                                                     <Archive className="w-8 h-8 text-slate-300 dark:text-slate-600" />
                                                 </div>
-                                                <div className="text-slate-900 dark:text-slate-200 font-medium">Belum ada arsip tersedia</div>
+                                                <div className="text-slate-900 dark:text-slate-200 font-medium">No archives available yet</div>
                                                 <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xs">
-                                                    Data arsip log lama akan muncul di sini.
+                                                    Old log archives will appear here.
                                                 </p>
                                             </div>
                                         </TableCell>

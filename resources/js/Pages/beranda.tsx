@@ -111,16 +111,16 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
 
   const handleToggleStream = () => {
     setIsStreaming(!isStreaming);
-    toast(isStreaming ? "Live stream dijeda" : "Live stream dilanjutkan");
+    toast(isStreaming ? "Live stream paused" : "Live stream resumed");
   };
 
   const handleClearLogs = () => {
     setClearedAt(new Date()); // Set barrier
-    toast.success("Live stream dibersihkan");
+    toast.success("Live stream cleared");
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("id-ID", {
+    return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -146,12 +146,12 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
 
   const greeting = useMemo(() => {
     const hour = new Date().getHours();
-    let text = "🌙 Selamat Malam";
-    if (hour >= 4 && hour < 11) text = "🌤️ Selamat Pagi";
-    else if (hour >= 11 && hour < 15) text = "☀️ Selamat Siang";
-    else if (hour >= 15 && hour < 18) text = "⛅ Selamat Sore";
+    let text = "🌙 Good Evening";
+    if (hour >= 4 && hour < 11) text = "🌤️ Good Morning";
+    else if (hour >= 11 && hour < 15) text = "☀️ Good Afternoon";
+    else if (hour >= 15 && hour < 18) text = "⛅ Good Afternoon";
 
-    return `${text}, ${user?.name || 'Pengguna'}`;
+    return `${text}, ${user?.name || 'User'}`;
   }, [user]);
 
   const handleChartClick = (_timeStr: string) => {
@@ -170,7 +170,7 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
 
       <PageHeader
         title={greeting}
-        description="Berikut ringkasan kesehatan sistem hari ini."
+        description="Here is today's system health summary."
         icon={LayoutDashboard}
         className="dark:text-white"
         titleClassName="dark:text-white"
@@ -206,13 +206,13 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
                   <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100 leading-none">Aktivitas Error</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Pantauan 24 jam terakhir</p>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100 leading-none">Error Activity</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Last 24 hours monitoring</p>
                 </div>
               </div>
               <TabsList className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 p-1 rounded-lg h-9 shadow-sm">
-                <TabsTrigger value="line" className="h-7 text-xs px-3 rounded-md data-[state=active]:bg-gray-100 dark:data-[state=active]:bg-slate-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white transition-all text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200">Garis</TabsTrigger>
-                <TabsTrigger value="bar" className="h-7 text-xs px-3 rounded-md data-[state=active]:bg-gray-100 dark:data-[state=active]:bg-slate-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white transition-all text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200">Batang</TabsTrigger>
+                <TabsTrigger value="line" className="h-7 text-xs px-3 rounded-md data-[state=active]:bg-gray-100 dark:data-[state=active]:bg-slate-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white transition-all text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200">Line</TabsTrigger>
+                <TabsTrigger value="bar" className="h-7 text-xs px-3 rounded-md data-[state=active]:bg-gray-100 dark:data-[state=active]:bg-slate-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white transition-all text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200">Bar</TabsTrigger>
               </TabsList>
             </div>
             <Card className="border-none shadow-md bg-white dark:bg-slate-900/50 ring-1 ring-gray-200/60 dark:ring-slate-800 p-1">
@@ -242,7 +242,7 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100 leading-none">Live Stream</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Log error waktu nyata</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Real-time error logs</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -272,9 +272,9 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${isStreaming ? 'bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-gray-300 dark:bg-slate-600'}`}></div>
-                  <span className="text-sm font-medium text-gray-600 dark:text-slate-300">Status: {isStreaming ? 'Monitoring...' : 'Jeda'}</span>
+                  <span className="text-sm font-medium text-gray-600 dark:text-slate-300">Status: {isStreaming ? 'Monitoring...' : 'Paused'}</span>
                 </div>
-                <span className="text-xs text-gray-400 dark:text-slate-500">Menampilkan 5 log terbaru</span>
+                <span className="text-xs text-gray-400 dark:text-slate-500">Showing latest 5 logs</span>
               </div>
             </div>
 
@@ -285,7 +285,7 @@ export function Beranda({ errors, user, isLoading = false, onViewDetails }: Bera
                     <div className="w-12 h-12 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-3">
                       <Radio className="w-6 h-6 text-gray-300 dark:text-slate-600" />
                     </div>
-                    <p className="font-medium text-sm text-gray-500 dark:text-slate-400">{isStreaming ? "Menunggu log error masuk..." : "Live stream dijeda"}</p>
+                    <p className="font-medium text-sm text-gray-500 dark:text-slate-400">{isStreaming ? "Waiting for error logs..." : "Live stream paused"}</p>
                   </div>
                 ) : (
                   liveLogs.map((log) => (

@@ -48,7 +48,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                 setDevelopers(options);
             })
             .catch((err: any) => {
-                console.error("Gagal memuat developer", err);
+                console.error("Failed to load developers", err);
             });
     }
 
@@ -60,8 +60,8 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                 setLoading(false);
             })
             .catch((err: any) => {
-                console.error("Gagal memuat aplikasi", err);
-                toast.error("Gagal memuat daftar aplikasi");
+                console.error("Failed to load applications", err);
+                toast.error("Failed to load application list");
                 setLoading(false);
             });
     };
@@ -77,19 +77,19 @@ export function ManajemenAplikasi({ user }: { user: any }) {
 
     const handleCreate = () => {
         if (!formData.app_name) {
-            toast.error("Nama aplikasi wajib diisi");
+            toast.error("Application name is required");
             return;
         }
 
         (window as any).axios.post('/api/dashboard/apps', formData)
             .then(() => {
-                toast.success("Aplikasi berhasil ditambahkan");
+                toast.success("Application successfully added");
                 setIsCreateOpen(false);
                 fetchApps();
                 resetForm();
             })
             .catch((err: any) => {
-                toast.error(err.response?.data?.message || "Gagal menambah aplikasi");
+                toast.error(err.response?.data?.message || "Failed to add application");
             });
     };
 
@@ -108,13 +108,13 @@ export function ManajemenAplikasi({ user }: { user: any }) {
 
         (window as any).axios.put(`/api/dashboard/apps/${selectedApp.id}`, formData)
             .then(() => {
-                toast.success("Aplikasi berhasil diperbarui");
+                toast.success("Application successfully updated");
                 setIsEditOpen(false);
                 fetchApps();
                 resetForm();
             })
             .catch((err: any) => {
-                toast.error(err.response?.data?.message || "Gagal memperbarui aplikasi");
+                toast.error(err.response?.data?.message || "Failed to update application");
             });
     };
 
@@ -128,19 +128,19 @@ export function ManajemenAplikasi({ user }: { user: any }) {
 
         (window as any).axios.delete(`/api/dashboard/apps/${selectedApp.id}`)
             .then(() => {
-                toast.success("Aplikasi berhasil dihapus");
+                toast.success("Application successfully deleted");
                 setIsDeleteOpen(false);
                 fetchApps();
                 resetForm();
             })
             .catch((err: any) => {
-                toast.error(err.response?.data?.message || "Gagal menghapus aplikasi");
+                toast.error(err.response?.data?.message || "Failed to delete application");
             });
     };
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
-        toast.success("API Key disalin ke clipboard");
+        toast.success("API Key copied to clipboard");
     };
 
     return (
@@ -149,8 +149,8 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                 {/* Left Column: App List */}
                 <div className="lg:col-span-2 space-y-6">
                     <PageHeader
-                        title="Manajemen Aplikasi"
-                        description="Daftarkan dan kelola akses aplikasi yang dimonitor."
+                        title="App Management"
+                        description="Register and manage monitored applications."
                         icon={Grid}
                         titleClassName="dark:text-white"
                         descriptionClassName="dark:text-slate-400"
@@ -158,7 +158,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                         {(user?.role === 'admin') && (
                             <Button className="bg-eris-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 dark:shadow-none dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:text-white" onClick={() => { resetForm(); setIsCreateOpen(true); }}>
                                 <Plus className="w-4 h-4 mr-2" />
-                                Tambah Aplikasi
+                                Add Application
                             </Button>
                         )}
                     </PageHeader>
@@ -169,10 +169,10 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                 <TableHeader className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                                     <TableRow>
                                         <TableHead className="w-[50px] text-center font-semibold text-slate-600 dark:text-slate-300">No</TableHead>
-                                        <TableHead className="font-semibold text-slate-600 dark:text-slate-300 min-w-[200px]">Aplikasi</TableHead>
-                                        <TableHead className="font-semibold text-slate-600 dark:text-slate-300 min-w-[120px]">Tim Developer</TableHead>
+                                        <TableHead className="font-semibold text-slate-600 dark:text-slate-300 min-w-[200px]">Application</TableHead>
+                                        <TableHead className="font-semibold text-slate-600 dark:text-slate-300 min-w-[120px]">Developer Team</TableHead>
                                         <TableHead className="font-semibold text-slate-600 dark:text-slate-300">API Key</TableHead>
-                                        <TableHead className="font-semibold text-slate-600 dark:text-slate-300 w-[100px] text-center">Aksi</TableHead>
+                                        <TableHead className="font-semibold text-slate-600 dark:text-slate-300 w-[100px] text-center">Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -189,7 +189,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                     ) : apps.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={5} className="h-32 text-center text-slate-500">
-                                                {user?.role === 'admin' ? "Belum ada aplikasi terdaftar." : "Anda belum ditugaskan ke aplikasi mana pun."}
+                                                {user?.role === 'admin' ? "No applications registered yet." : "You have not been assigned to any application."}
                                             </TableCell>
                                         </TableRow>
                                     ) : (
@@ -266,44 +266,44 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                 <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
                     <DialogContent className="sm:max-w-[500px]">
                         <DialogHeader>
-                            <DialogTitle>Tambah Aplikasi Baru</DialogTitle>
+                            <DialogTitle>Add New Application</DialogTitle>
                             <DialogDescription>
-                                Daftarkan aplikasi baru untuk mendapatkan API Key unik.
+                                Register a new application to get a unique API Key.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <Label htmlFor="app_name">Nama Aplikasi <span className="text-red-500">*</span></Label>
+                                <Label htmlFor="app_name">Application Name <span className="text-red-500">*</span></Label>
                                 <Input
                                     id="app_name"
-                                    placeholder="Contoh: Sistem Keuangan"
+                                    placeholder="Ex: Finance System"
                                     value={formData.app_name}
                                     onChange={(e) => setFormData({ ...formData, app_name: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="desc">Deskripsi</Label>
+                                <Label htmlFor="desc">Description</Label>
                                 <Textarea
                                     id="desc"
-                                    placeholder="Keterangan singkat aplikasi..."
+                                    placeholder="Short description of the app..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Tim Developer</Label>
+                                <Label>Developer Team</Label>
                                 <MultiSelect
                                     options={developers}
                                     selected={formData.developers}
                                     onChange={(selected) => setFormData({ ...formData, developers: selected })}
-                                    placeholder="Pilih developer..."
+                                    placeholder="Select developers..."
                                 />
-                                <p className="text-[11px] text-slate-400">Developer yang dipilih akan memiliki akses penuh ke log aplikasi ini.</p>
+                                <p className="text-[11px] text-slate-400">Selected developers will have full access to this app's logs.</p>
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsCreateOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Batal</Button>
-                            <Button onClick={handleCreate} className="bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:text-white">Simpan Aplikasi</Button>
+                            <Button variant="outline" onClick={() => setIsCreateOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Cancel</Button>
+                            <Button onClick={handleCreate} className="bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:text-white">Save Application</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -312,14 +312,14 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                 <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogContent className="sm:max-w-[500px]">
                         <DialogHeader>
-                            <DialogTitle>Edit Aplikasi</DialogTitle>
+                            <DialogTitle>Edit Application</DialogTitle>
                             <DialogDescription>
-                                Perbarui informasi aplikasi.
+                                Update application information.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <Label htmlFor="edit_app_name">Nama Aplikasi <span className="text-red-500">*</span></Label>
+                                <Label htmlFor="edit_app_name">Application Name <span className="text-red-500">*</span></Label>
                                 <Input
                                     id="edit_app_name"
                                     value={formData.app_name}
@@ -327,7 +327,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="edit_desc">Deskripsi</Label>
+                                <Label htmlFor="edit_desc">Description</Label>
                                 <Textarea
                                     id="edit_desc"
                                     value={formData.description}
@@ -335,18 +335,18 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Tim Developer</Label>
+                                <Label>Developer Team</Label>
                                 <MultiSelect
                                     options={developers}
                                     selected={formData.developers}
                                     onChange={(selected) => setFormData({ ...formData, developers: selected })}
-                                    placeholder="kelola tim..."
+                                    placeholder="manage team..."
                                 />
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsEditOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Batal</Button>
-                            <Button onClick={handleUpdate} className="bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:text-white">Simpan Perubahan</Button>
+                            <Button variant="outline" onClick={() => setIsEditOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Cancel</Button>
+                            <Button onClick={handleUpdate} className="bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:text-white">Save Changes</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -357,15 +357,15 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                         <DialogHeader>
                             <DialogTitle className="text-red-600 flex items-center gap-2">
                                 <AlertCircle className="w-5 h-5" />
-                                Hapus Aplikasi?
+                                Delete Application?
                             </DialogTitle>
                             <DialogDescription>
-                                Tindakan ini tidak dapat dibatalkan. Semua log error yang terkait dengan aplikasi <strong>{selectedApp?.app_name}</strong> juga akan dihapus permanen.
+                                This action cannot be undone. All error logs related to <strong>{selectedApp?.app_name}</strong> will be permanently deleted.
                             </DialogDescription>
                         </DialogHeader>
                         <DialogFooter className="gap-2 sm:gap-0">
-                            <Button variant="outline" onClick={() => setIsDeleteOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Batal</Button>
-                            <Button variant="destructive" onClick={handleDelete} className="bg-red-600 hover:bg-red-700">Ya, Hapus Permanen</Button>
+                            <Button variant="outline" onClick={() => setIsDeleteOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Cancel</Button>
+                            <Button variant="destructive" onClick={handleDelete} className="bg-red-600 hover:bg-red-700">Yes, Delete Permanently</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -376,7 +376,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                         <CardHeader>
                             <CardTitle className="text-white flex items-center gap-2">
                                 <Terminal className="w-5 h-5 text-cyan-500" />
-                                Panduan Integrasi Cepat
+                                Quick Integration Guide
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 text-sm">
@@ -388,7 +388,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-slate-400 text-xs uppercase font-bold tracking-wider">Header Wajib</Label>
+                                <Label className="text-slate-400 text-xs uppercase font-bold tracking-wider">Required Headers</Label>
                                 <div className="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-xs space-y-1">
                                     <div className="flex justify-between">
                                         <span className="text-orange-400">Content-Type:</span>
@@ -402,7 +402,7 @@ export function ManajemenAplikasi({ user }: { user: any }) {
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-slate-400 text-xs uppercase font-bold tracking-wider">Contoh Body JSON</Label>
+                                <Label className="text-slate-400 text-xs uppercase font-bold tracking-wider">Example JSON Body</Label>
                                 <pre className="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-xs text-green-400 overflow-x-auto">
                                     {`{
   "message": "Error details...",

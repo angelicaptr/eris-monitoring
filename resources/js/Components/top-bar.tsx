@@ -26,7 +26,7 @@ import {
 } from "@/Components/ui/popover";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
-import { id } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 interface TopBarProps {
     criticalErrors: any[];
@@ -45,11 +45,11 @@ export function TopBar({ criticalErrors, onMarkAsRead, onMarkAllAsRead, onLogout
     }, []);
 
     const formatTime = (date: Date) => {
-        return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace('.', ':');
+        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     };
 
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
+        return date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
     };
 
     return (
@@ -111,7 +111,7 @@ export function TopBar({ criticalErrors, onMarkAsRead, onMarkAllAsRead, onLogout
                                                     <div className="flex items-start justify-between mb-1">
                                                         <span className="font-bold text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded border border-red-100 dark:border-red-900/30">{error.service}</span>
                                                         <span className="text-[10px] text-gray-400 dark:text-slate-500 whitespace-nowrap ml-2">
-                                                            {formatDistanceToNow(error.timestamp, { addSuffix: true, locale: id })}
+                                                            {formatDistanceToNow(error.timestamp, { addSuffix: true, locale: enUS })}
                                                         </span>
                                                     </div>
                                                     <p className="text-sm text-gray-700 dark:text-slate-300 line-clamp-2 mt-1 font-medium">{error.message}</p>
@@ -145,20 +145,20 @@ export function TopBar({ criticalErrors, onMarkAsRead, onMarkAllAsRead, onLogout
                             <DropdownMenuSeparator className="bg-gray-100 dark:bg-slate-800" />
                             <DropdownMenuItem onClick={() => navigate("/profil-pengguna")} className="text-sm px-2 py-2 cursor-pointer text-gray-600 dark:text-slate-300 focus:text-indigo-600 dark:focus:text-indigo-400 focus:bg-indigo-50 dark:focus:bg-indigo-900/20 rounded-md">
                                 <User className="w-4 h-4 mr-2.5" />
-                                Profil Pengguna
+                                User Profile
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => navigate("/konfigurasi-email")} className="text-sm px-2 py-2 cursor-pointer text-gray-600 dark:text-slate-300 focus:text-indigo-600 dark:focus:text-indigo-400 focus:bg-indigo-50 dark:focus:bg-indigo-900/20 rounded-md">
                                 <Mail className="w-4 h-4 mr-2.5" />
-                                Konfigurasi Email
+                                Email Configuration
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => navigate("/dokumentasi-api")} className="text-sm px-2 py-2 cursor-pointer text-gray-600 dark:text-slate-300 focus:text-indigo-600 dark:focus:text-indigo-400 focus:bg-indigo-50 dark:focus:bg-indigo-900/20 rounded-md">
                                 <BookOpen className="w-4 h-4 mr-2.5" />
-                                Dokumentasi API
+                                API Documentation
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-gray-100 dark:bg-slate-800" />
                             <DropdownMenuItem onClick={onLogout} className="text-sm px-2 py-2 cursor-pointer text-red-600 dark:text-red-400 focus:text-red-700 dark:focus:text-red-300 focus:bg-red-50 dark:focus:bg-red-900/20 rounded-md">
                                 <span className="flex items-center font-medium">
-                                    Logout Aplikasi
+                                    Logout
                                 </span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>

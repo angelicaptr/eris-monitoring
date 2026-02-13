@@ -73,7 +73,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
 
   const handleExport = () => {
     const data = filteredErrors.map(error => ({
-      Timestamp: error.timestamp.toLocaleString('id-ID'),
+      Timestamp: error.timestamp.toLocaleString('en-US'),
       Severity: error.severity.toUpperCase(),
       Service: error.service,
       Code: error.errorCode,
@@ -87,7 +87,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Log Data");
     XLSX.writeFile(wb, `Log_Export_${new Date().toISOString().split('T')[0]}.xlsx`);
-    toast.success("Log berhasil diexport ke Excel");
+    toast.success("Logs successfully exported to Excel");
   };
 
   const filteredErrors = useMemo(() => {
@@ -164,16 +164,16 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
       status: status
     })
       .then(() => {
-        toast.success(`Berhasil mengubah status ${selectedIds.length} log.`);
+        toast.success(`Successfully updated status for ${selectedIds.length} logs.`);
         setSelectedIds([]);
         onRefresh();
       })
       .catch((err: any) => {
         console.error(err);
         if (err.response && err.response.status === 403) {
-          toast.error(err.response.data.message || "Akses ditolak.");
+          toast.error(err.response.data.message || "Access denied.");
         } else {
-          toast.error("Gagal mengubah status log.");
+          toast.error("Failed to update log status.");
         }
       })
       .finally(() => setIsBulkLoading(false));
@@ -187,14 +187,14 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
       data: { ids: selectedIds } // Delete requests need body in 'data' key for axios
     })
       .then(() => {
-        toast.success(`Berhasil menghapus ${selectedIds.length} log.`);
+        toast.success(`Successfully deleted ${selectedIds.length} logs.`);
         setSelectedIds([]);
         setIsDeleteDialogOpen(false);
         onRefresh();
       })
       .catch((err: any) => {
         console.error(err);
-        toast.error("Gagal menghapus log. Pastikan Anda Admin.");
+        toast.error("Failed to delete logs. Ensure you are an Admin.");
       })
       .finally(() => setIsBulkLoading(false));
   };
@@ -211,8 +211,8 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
   return (
     <div className="space-y-6 relative">
       <PageHeader
-        title="Semua Log Error"
-        description="Tabel utama yang menampilkan seluruh riwayat error dari semua aplikasi."
+        title="All Error Logs"
+        description="Main table displaying error history from all applications."
         icon={List}
         titleClassName="dark:text-white"
         descriptionClassName="dark:text-slate-400"
@@ -223,7 +223,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 fade-in duration-300">
           <Card className="flex items-center gap-4 p-3 pr-6 shadow-xl border-indigo-200 bg-white/95 dark:bg-slate-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 ring-2 ring-indigo-500/20 dark:ring-indigo-500/10 rounded-full dark:border-indigo-900/30">
             <div className="bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-              {selectedIds.length} Dipilih
+              {selectedIds.length} Selected
             </div>
             <div className="h-6 w-px bg-gray-200" />
             <div className="flex gap-2">
@@ -276,7 +276,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
                   disabled={isBulkLoading}
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
-                  Hapus
+                  Delete
                 </Button>
               )}
               <Button
@@ -299,15 +299,15 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-red-600">
               <AlertTriangle className="w-5 h-5" />
-              Konfirmasi Hapus
+              Delete Confirmation
             </AlertDialogTitle>
             <AlertDialogDescription className="dark:text-slate-400">
-              Anda akan menghapus <strong className="text-slate-900 dark:text-slate-200">{selectedIds.length} log error</strong> secara permanen.
-              Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?
+              You are about to permanently delete <strong className="text-slate-900 dark:text-slate-200">{selectedIds.length} error logs</strong>.
+              This action cannot be undone. Are you sure?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isBulkLoading} className="dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:border-slate-700">Batal</AlertDialogCancel>
+            <AlertDialogCancel disabled={isBulkLoading} className="dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:border-slate-700">Cancel</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700 text-white"
               onClick={(e) => {
@@ -316,7 +316,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
               }}
               disabled={isBulkLoading}
             >
-              {isBulkLoading ? "Menghapus..." : "Ya, Hapus Log"}
+              {isBulkLoading ? "Deleting..." : "Yes, Delete Logs"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -325,7 +325,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
       <Card className="p-4 border-none shadow-md bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm ring-1 ring-gray-200/60 dark:ring-slate-800 transition-all duration-300">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-tight">Filter & Pencarian</h3>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-tight">Filter & Search</h3>
             <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20">Advanced</span>
           </div>
           <Button
@@ -363,12 +363,12 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
               {(dateRange?.from || selectedSeverity !== "all" || selectedService !== "all" || searchQuery) && (
                 <span className="font-medium text-indigo-600 animate-in fade-in zoom-in duration-300 flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
-                  Ditemukan {filteredErrors.length} hasil
+                  Found {filteredErrors.length} results
                 </span>
               )}
             </div>
             <div className="text-gray-400 font-medium">
-              Menampilkan {paginatedErrors.length} dari {filteredErrors.length} error
+              Showing {paginatedErrors.length} of {filteredErrors.length} errors
             </div>
           </div>
         </div>
@@ -387,7 +387,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
         <Card className="p-4 border-none shadow-sm bg-white/60 dark:bg-slate-900/80 backdrop-blur-sm ring-1 ring-gray-200/50 dark:ring-slate-800">
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-              Halaman {currentPage} dari {totalPages}
+              Page {currentPage} of {totalPages}
             </div>
             <div className="flex gap-2">
               <Button
@@ -398,7 +398,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
                 className="hover:bg-white hover:shadow-sm border-gray-200 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
               >
                 <ChevronLeft className="w-4 h-4 mr-1" />
-                Sebelumnya
+                Previous
               </Button>
 
               <div className="flex gap-1">
@@ -435,7 +435,7 @@ export function SemuaLog({ errors, applications, developers = [], user, onViewDe
                 disabled={currentPage === totalPages}
                 className="hover:bg-white hover:shadow-sm border-gray-200 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
               >
-                Selanjutnya
+                Next
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>

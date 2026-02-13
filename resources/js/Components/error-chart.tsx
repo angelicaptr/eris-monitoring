@@ -37,7 +37,6 @@ interface ErrorChartProps {
 }
 
 import { useRef } from 'react';
-import { Chart } from 'chart.js';
 
 export function ErrorChart({ data, chartType, onClick }: ErrorChartProps) {
     const chartRef = useRef<any>(null);
@@ -183,8 +182,8 @@ export function ErrorChart({ data, chartType, onClick }: ErrorChartProps) {
     return (
         <div className="w-full h-full p-2">
             <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Statistik Harian</h3>
-                <p className="text-sm text-gray-500 dark:text-slate-400">Distribusi error per jam hari ini</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Daily Statistics</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400">Hourly error distribution for today</p>
             </div>
             <div className="h-[320px] w-full">
                 {chartType === "line" ? (

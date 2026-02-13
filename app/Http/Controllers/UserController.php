@@ -62,12 +62,12 @@ class UserController extends Controller
 
         // Prevent deleting self?
         if (auth()->id() == $id) {
-            return response()->json(['message' => 'Tidak dapat menghapus akun sendiri.'], 403);
+            return response()->json(['message' => 'Cannot delete your own account.'], 403);
         }
 
         $user->delete();
 
-        return response()->json(['message' => 'User berhasil dihapus']);
+        return response()->json(['message' => 'User successfully deleted']);
     }
 
     public function getDevelopers()

@@ -21,6 +21,10 @@ export interface ErrorLog {
     resolvedBy?: any; // User object or ID
     inProgressAt?: Date;
     inProgressBy?: any; // User object or ID
+    application?: {
+        id: number;
+        app_name: string;
+    };
 }
 
 interface ErrorTableProps {
@@ -97,8 +101,8 @@ export function ErrorTable({ errors, onViewDetails, onRefresh, selectedIds = [],
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-20" />
             <div className="p-6 flex justify-between items-center border-b border-gray-100">
                 <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Riwayat Error</h3>
-                    <p className="text-sm text-gray-500 dark:text-slate-400">Daftar semua error yang tercatat sistem</p>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Error History</h3>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">List of all errors recorded by the system</p>
                 </div>
                 {onRefresh && (
                     <Button variant="outline" size="sm" onClick={onRefresh} className="gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 bg-white dark:bg-slate-900">
@@ -127,7 +131,7 @@ export function ErrorTable({ errors, onViewDetails, onRefresh, selectedIds = [],
                             )}
                             <TableHead className="w-[180px] pl-6 py-4 cursor-pointer font-semibold text-gray-600 text-xs uppercase tracking-wider" onClick={() => handleSort("timestamp")}>
                                 <div className="flex items-center gap-1 hover:text-indigo-600 transition-colors">
-                                    Waktu <SortIcon field="timestamp" />
+                                    Time <SortIcon field="timestamp" />
                                 </div>
                             </TableHead>
                             <TableHead className="w-[100px] py-4 cursor-pointer font-semibold text-gray-600 text-xs uppercase tracking-wider" onClick={() => handleSort("severity")}>
@@ -135,15 +139,15 @@ export function ErrorTable({ errors, onViewDetails, onRefresh, selectedIds = [],
                                     Severity <SortIcon field="severity" />
                                 </div>
                             </TableHead>
-                            <TableHead className="w-[120px] py-4 font-semibold text-gray-600 text-xs uppercase tracking-wider">Kode</TableHead>
-                            <TableHead className="py-4 font-semibold text-gray-600 text-xs uppercase tracking-wider min-w-[300px]">Pesan</TableHead>
+                            <TableHead className="w-[120px] py-4 font-semibold text-gray-600 text-xs uppercase tracking-wider">Code</TableHead>
+                            <TableHead className="py-4 font-semibold text-gray-600 text-xs uppercase tracking-wider min-w-[300px]">Message</TableHead>
                             <TableHead className="w-[150px] py-4 cursor-pointer font-semibold text-gray-600 text-xs uppercase tracking-wider" onClick={() => handleSort("service")}>
                                 <div className="flex items-center gap-1 hover:text-indigo-600 transition-colors">
-                                    Aplikasi <SortIcon field="service" />
+                                    Application <SortIcon field="service" />
                                 </div>
                             </TableHead>
                             <TableHead className="w-[150px] py-4 font-semibold text-gray-600 text-xs uppercase tracking-wider">Status</TableHead>
-                            <TableHead className="w-[80px] pr-6 py-4 text-right font-semibold text-gray-600 text-xs uppercase tracking-wider">Aksi</TableHead>
+                            <TableHead className="w-[80px] pr-6 py-4 text-right font-semibold text-gray-600 text-xs uppercase tracking-wider">Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -154,8 +158,8 @@ export function ErrorTable({ errors, onViewDetails, onRefresh, selectedIds = [],
                                         <div className="p-3 bg-white rounded-full shadow-sm mb-4">
                                             <RotateCw className="w-6 h-6 text-gray-300" />
                                         </div>
-                                        <p className="font-medium text-gray-900">Tidak ada error ditemukan</p>
-                                        <p className="text-sm text-gray-500 mt-1">Sistem berjalan dengan normal atau filter terlalu spesifik</p>
+                                        <p className="font-medium text-gray-900">No errors found</p>
+                                        <p className="text-sm text-gray-500 mt-1">System is running normally or filter is too specific</p>
                                     </div>
                                 </TableCell>
                             </TableRow>

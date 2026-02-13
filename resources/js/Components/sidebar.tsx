@@ -19,12 +19,12 @@ interface SidebarProps {
 
 export function Sidebar({ criticalCount, userRole, user }: SidebarProps) {
     const allMenuItems = [
-        { id: "beranda", path: "/", label: "Beranda", icon: LayoutDashboard, roles: ['admin', 'developer'] },
-        { id: "semua-log", path: "/semua-log", label: "Monitoring Log", icon: List, badge: criticalCount > 0 ? criticalCount : undefined, roles: ['admin', 'developer'] },
-        { id: "laporan-analitik", path: "/laporan-analitik", label: "Laporan Analitik", icon: PieChart, roles: ['admin', 'developer'] },
-        { id: "pusat-arsip", path: "/pusat-arsip", label: "Pusat Arsip", icon: Archive, roles: ['admin'] },
-        { id: "manajemen-aplikasi", path: "/manajemen-aplikasi", label: "Manajemen Aplikasi", icon: Grid, roles: ['admin'] },
-        { id: "manajemen-pengguna", path: "/manajemen-pengguna", label: "Manajemen Pengguna", icon: User, roles: ['admin'] },
+        { id: "beranda", path: "/", label: "Home", icon: LayoutDashboard, roles: ['admin', 'developer'] },
+        { id: "semua-log", path: "/semua-log", label: "Log Monitoring", icon: List, badge: criticalCount > 0 ? criticalCount : undefined, roles: ['admin', 'developer'] },
+        { id: "laporan-analitik", path: "/laporan-analitik", label: "Analytics Report", icon: PieChart, roles: ['admin', 'developer'] },
+        { id: "pusat-arsip", path: "/pusat-arsip", label: "Archive Center", icon: Archive, roles: ['admin'] },
+        { id: "manajemen-aplikasi", path: "/manajemen-aplikasi", label: "App Management", icon: Grid, roles: ['admin'] },
+        { id: "manajemen-pengguna", path: "/manajemen-pengguna", label: "User Management", icon: User, roles: ['admin'] },
     ];
 
     // ... (role filtering logic remains same, removed debug logs for cleaner code)

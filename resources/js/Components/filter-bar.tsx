@@ -60,7 +60,7 @@ export function FilterBar({
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
-                        placeholder="Cari pesan error, kode error, atau service..."
+                        placeholder="Search error message, error code, or service..."
                         value={searchQuery}
                         onChange={(e) => onSearchChange(e.target.value)}
                         className="pl-9 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-950 dark:text-slate-200 transition-all"
@@ -82,7 +82,7 @@ export function FilterBar({
                         <SelectValue placeholder="Severity" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">Semua Level</SelectItem>
+                        <SelectItem value="all">All Levels</SelectItem>
                         <SelectItem value="critical">Critical</SelectItem>
                         <SelectItem value="error">Error</SelectItem>
                         <SelectItem value="warning">Warning</SelectItem>
@@ -94,7 +94,7 @@ export function FilterBar({
                         <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">Semua Status</SelectItem>
+                        <SelectItem value="all">All Statuses</SelectItem>
                         <SelectItem value="open">Open</SelectItem>
                         <SelectItem value="in_progress">In Progress</SelectItem>
                         <SelectItem value="resolved">Resolved</SelectItem>
@@ -103,10 +103,10 @@ export function FilterBar({
 
                 <Select value={selectedService} onValueChange={onServiceChange}>
                     <SelectTrigger className="w-[180px] bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200">
-                        <SelectValue placeholder="Aplikasi" />
+                        <SelectValue placeholder="Application" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">Semua Aplikasi</SelectItem>
+                        <SelectItem value="all">All Applications</SelectItem>
                         {services.map((service) => (
                             <SelectItem key={service} value={service}>
                                 {service}
@@ -120,12 +120,12 @@ export function FilterBar({
                     <Select value={selectedDeveloper} onValueChange={onDeveloperChange}>
                         <SelectTrigger className="w-[180px] bg-white dark:bg-slate-900 border-dashed border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-400">
                             <span className="truncate">
-                                {selectedDeveloper === 'all' ? 'Semua Developer' :
+                                {selectedDeveloper === 'all' ? 'All Developers' :
                                     developers.find(d => String(d.id) === selectedDeveloper)?.name || 'Filter Developer'}
                             </span>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">Semua Developer</SelectItem>
+                            <SelectItem value="all">All Developers</SelectItem>
                             {developers.map((dev) => (
                                 <SelectItem key={dev.id} value={String(dev.id)}>
                                     {dev.name}

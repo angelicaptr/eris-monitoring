@@ -62,7 +62,7 @@ export function ManajemenPengguna() {
 
     const handleSubmit = () => {
         if (!formData.name || !formData.email || (!isEditing && !formData.password)) {
-            toast.error("Mohon lengkapi data");
+            toast.error("Please complete the data");
             return;
         }
 
@@ -71,21 +71,21 @@ export function ManajemenPengguna() {
         if (isEditing && selectedUser) {
             (window as any).axios.put(`/api/dashboard/users/${selectedUser.id}`, payload)
                 .then(() => {
-                    toast.success("User berhasil diupdate");
+                    toast.success("User successfully updated");
                     fetchUsers();
                     setIsDialogOpen(false);
                     resetForm();
                 })
-                .catch((err: any) => toast.error("Gagal update user: " + err.response?.data?.message));
+                .catch((err: any) => toast.error("Failed to update user: " + err.response?.data?.message));
         } else {
             (window as any).axios.post('/api/dashboard/users', payload)
                 .then(() => {
-                    toast.success("Developer berhasil ditambahkan");
+                    toast.success("Developer successfully added");
                     fetchUsers();
                     setIsDialogOpen(false);
                     resetForm();
                 })
-                .catch((err: any) => toast.error("Gagal tambah user: " + err.response?.data?.message));
+                .catch((err: any) => toast.error("Failed to add user: " + err.response?.data?.message));
         }
     };
 
@@ -101,43 +101,43 @@ export function ManajemenPengguna() {
     };
 
     const handleDelete = (id: number) => {
-        if (confirm("Yakin ingin menghapus user ini?")) {
+        if (confirm("Are you sure you want to delete this user?")) {
             (window as any).axios.delete(`/api/dashboard/users/${id}`)
                 .then(() => {
-                    toast.success("User dihapus");
+                    toast.success("User deleted");
                     fetchUsers();
                 })
-                .catch((err: any) => toast.error("Gagal hapus: " + err.response?.data?.message));
+                .catch((err: any) => toast.error("Failed to delete: " + err.response?.data?.message));
         }
     };
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             <PageHeader
-                title="Manajemen Pengguna"
-                description="Kelola akun developer dan admin sistem."
+                title="User Management"
+                description="Manage developer and system admin accounts."
                 icon={Users}
             >
                 <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="bg-eris-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200">
                     <UserPlus className="w-4 h-4 mr-2" />
-                    Tambah Akun
+                    Add Account
                 </Button>
             </PageHeader>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Daftar Pengguna</CardTitle>
+                    <CardTitle>User List</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                             <TableRow>
                                 <TableHead className="w-[50px] text-center font-semibold text-slate-600 dark:text-slate-300">No</TableHead>
-                                <TableHead className="font-semibold text-slate-600 dark:text-slate-300">Nama Pengguna</TableHead>
+                                <TableHead className="font-semibold text-slate-600 dark:text-slate-300">Username</TableHead>
                                 <TableHead className="font-semibold text-slate-600 dark:text-slate-300">Email</TableHead>
                                 <TableHead className="font-semibold text-slate-600 dark:text-slate-300 text-center w-[120px]">Role</TableHead>
-                                <TableHead className="font-semibold text-slate-600 dark:text-slate-300 w-[150px]">Bergabung Sejak</TableHead>
-                                <TableHead className="text-right font-semibold text-slate-600 dark:text-slate-300 w-[100px] pr-6">Aksi</TableHead>
+                                <TableHead className="font-semibold text-slate-600 dark:text-slate-300 w-[150px]">Joined Since</TableHead>
+                                <TableHead className="text-right font-semibold text-slate-600 dark:text-slate-300 w-[100px] pr-6">Action</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -155,7 +155,7 @@ export function ManajemenPengguna() {
                             ) : users.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={6} className="h-24 text-center text-slate-500">
-                                        Belum ada pengguna terdaftar.
+                                        No users registered yet.
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -182,7 +182,7 @@ export function ManajemenPengguna() {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-slate-500 text-xs">
-                                            {new Date(user.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                            {new Date(user.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                                         </TableCell>
                                         <TableCell className="text-right pr-6">
                                             <div className="flex justify-end gap-1">
@@ -215,19 +215,19 @@ export function ManajemenPengguna() {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{isEditing ? 'Edit User' : 'Tambah Developer Baru'}</DialogTitle>
+                        <DialogTitle>{isEditing ? 'Edit User' : 'Add New Developer'}</DialogTitle>
                         <DialogDescription>
-                            {isEditing ? 'Ubah informasi pengguna.' : 'User baru akan otomatis memiliki role Developer.'}
+                            {isEditing ? 'Update user information.' : 'New users will automatically have Developer role.'}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label>Nama Lengkap</Label>
+                            <Label>Full Name</Label>
                             <Input
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Contoh: John Doe"
+                                placeholder="Ex: John Doe"
                             />
                         </div>
                         <div className="space-y-2">
@@ -240,13 +240,13 @@ export function ManajemenPengguna() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>{isEditing ? 'Password Baru (Opsional)' : 'Password'}</Label>
+                            <Label>{isEditing ? 'New Password (Optional)' : 'Password'}</Label>
                             <div className="relative">
                                 <Input
                                     type={showPassword ? "text" : "password"}
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    placeholder={isEditing ? "Biarkan kosong jika tidak berubah" : "Minimal 8 karakter"}
+                                    placeholder={isEditing ? "Leave blank if unchanged" : "Minimum 8 characters"}
                                 />
                                 <Button
                                     type="button"
@@ -266,8 +266,8 @@ export function ManajemenPengguna() {
                     </div>
 
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Batal</Button>
-                        <Button onClick={handleSubmit} className="bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:text-white">Simpan</Button>
+                        <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:bg-slate-900 border-slate-200 dark:border-slate-700">Cancel</Button>
+                        <Button onClick={handleSubmit} className="bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:text-white">Save</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

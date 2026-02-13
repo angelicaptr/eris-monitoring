@@ -58,7 +58,7 @@ class DashboardController extends Controller
                     ($log->in_progress_by && $log->in_progress_by !== $user->id) ||
                     ($log->resolved_by && $log->resolved_by !== $user->id)
                 ) {
-                    return response()->json(['message' => 'Log ini sedang dikerjakan orang lain.'], 403);
+                    return response()->json(['message' => 'This log is currently being worked on by someone else.'], 403);
                 }
             }
             // Admin allowed.
@@ -70,7 +70,7 @@ class DashboardController extends Controller
             ) {
                 $claimer = $log->inProgressUser ?? $log->resolvedUser;
                 $claimerName = $claimer ? $claimer->name : 'Unknown';
-                return response()->json(['message' => 'Dikerjakan/Klaim oleh ' . $claimerName], 403);
+                return response()->json(['message' => 'Claimed/Worked on by ' . $claimerName], 403);
             }
         }
 
@@ -239,7 +239,7 @@ class DashboardController extends Controller
                         $log->load(['inProgressUser', 'resolvedUser']);
                         $claimer = $log->inProgressUser ?? $log->resolvedUser;
                         $claimerName = $claimer ? $claimer->name : 'User Lain';
-                        return response()->json(['message' => "Gagal: Log #{$log->id} sedang dikerjakan oleh {$claimerName}."], 403);
+                        return response()->json(['message' => "Failed: Log #{$log->id} is being worked on by {$claimerName}."], 403);
                     }
                 }
                 // Admin can always set to open.
@@ -252,7 +252,7 @@ class DashboardController extends Controller
                 ) {
                     $claimer = $log->inProgressUser ?? $log->resolvedUser;
                     $claimerName = $claimer ? $claimer->name : 'Unknown';
-                    return response()->json(['message' => 'Log sedang dikerjakan/klaim oleh ' . $claimerName], 403);
+                    return response()->json(['message' => 'Log is being worked on/claimed by ' . $claimerName], 403);
                 }
             }
         }

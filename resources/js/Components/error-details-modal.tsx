@@ -18,7 +18,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
 
     const handleCopy = (text: string) => {
         navigator.clipboard.writeText(text);
-        toast.success("Disalin ke clipboard");
+        toast.success("Copied to clipboard");
     };
 
     // Check if the current user is the one working on it
@@ -27,7 +27,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
     const updateStatus = (newStatus: 'open' | 'in_progress' | 'resolved') => {
         (window as any).axios.patch(`/api/dashboard/logs/${error.id}/status`, { status: newStatus })
             .then(() => {
-                toast.success(`Status berhasil diubah ke ${newStatus}`);
+                toast.success(`Status successfully changed to ${newStatus}`);
                 if (onUpdate) {
                     onUpdate();
                 }
@@ -35,8 +35,8 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
             })
             .catch((err: any) => {
                 console.error("DEBUG STATUS ERROR:", err);
-                const msg = err.response?.data?.message || err.message || "Gagal mengubah status";
-                toast.error(`Gagal: ${msg}`);
+                const msg = err.response?.data?.message || err.message || "Failed to change status";
+                toast.error(`Failed: ${msg}`);
             });
     };
 
@@ -91,7 +91,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Time</label>
                             <div className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400">
                                 <Clock className="w-4 h-4 text-slate-400" />
-                                {new Date(error.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                                {new Date(error.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                         </div>
                         <div className="space-y-1">
@@ -172,7 +172,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                                         className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 shadow-lg shadow-indigo-200"
                                     >
                                         <Shield className="w-4 h-4" />
-                                        Ambil (Claim)
+                                        Claim
                                     </Button>
                                 );
                             }
@@ -186,14 +186,14 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                                             onClick={() => updateStatus('open')}
                                             className="text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100 dark:bg-slate-900"
                                         >
-                                            Kembalikan ke Open
+                                            Return to Open
                                         </Button>
                                         <Button
                                             onClick={() => updateStatus('resolved')}
                                             className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-lg shadow-emerald-200"
                                         >
                                             <CheckCircle2 className="w-4 h-4" />
-                                            Tandai Selesai
+                                            Mark as Resolved
                                         </Button>
                                     </div>
                                 );
@@ -204,7 +204,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                                     <div className="flex items-center gap-4 bg-orange-50/50 dark:bg-orange-900/10 pr-2 pl-4 py-1 rounded-full border border-orange-100 dark:border-orange-900/30">
                                         <span className="text-xs text-orange-600 dark:text-orange-400 font-medium flex items-center">
                                             <Lock className="w-3 h-3 mr-1.5" />
-                                            Sedang dikerjakan oleh <span className="font-bold ml-1">{claimerName}</span>
+                                            Being worked on by <span className="font-bold ml-1">{claimerName}</span>
                                         </span>
                                         {/* Admin Override */}
                                         {isAdmin && (
@@ -240,7 +240,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                                         onClick={() => updateStatus('in_progress')}
                                         className="text-slate-600 border-slate-200 hover:bg-slate-50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-800"
                                     >
-                                        Buka Kembali (Re-open)
+                                        Re-open
                                     </Button>
                                 );
                             }
@@ -249,7 +249,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                                     <div className="flex items-center gap-4 bg-emerald-50/50 dark:bg-emerald-900/10 pr-2 pl-4 py-1 rounded-full border border-emerald-100 dark:border-emerald-900/30">
                                         <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center">
                                             <CheckCircle2 className="w-3 h-3 mr-1.5" />
-                                            Diselesaikan oleh <span className="font-bold ml-1">{claimerName}</span>
+                                            Resolved by <span className="font-bold ml-1">{claimerName}</span>
                                         </span>
                                         {/* Admin Override */}
                                         {isAdmin && (
@@ -280,7 +280,7 @@ export function ErrorDetailsModal({ error, open, onClose, onUpdate, currentUser 
                     })()}
 
                     <Button variant="ghost" onClick={onClose} className="hover:bg-slate-100">
-                        Tutup
+                        Close
                     </Button>
                 </div>
             </DialogContent>

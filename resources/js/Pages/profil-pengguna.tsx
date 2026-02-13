@@ -65,11 +65,11 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
       email: profileData.email
     })
       .then(() => {
-        toast.success("Profil berhasil diperbarui!");
+        toast.success("Profile updated successfully!");
         if (onUpdateUser) onUpdateUser();
       })
       .catch((err: any) => {
-        toast.error(err.response?.data?.message || "Gagal memperbarui profil");
+        toast.error(err.response?.data?.message || "Failed to update profile");
         console.error(err);
       })
       .finally(() => setIsProfileLoading(false));
@@ -79,12 +79,12 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
     e.preventDefault();
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("Password baru dan konfirmasi password tidak cocok!");
+      toast.error("New password and confirmation do not match!");
       return;
     }
 
     if (passwordData.newPassword.length < 8) {
-      toast.error("Password minimal 8 karakter!");
+      toast.error("Password must be at least 8 characters!");
       return;
     }
 
@@ -95,7 +95,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
       new_password_confirmation: passwordData.confirmPassword
     })
       .then(() => {
-        toast.success("Password berhasil diperbarui!");
+        toast.success("Password updated successfully!");
         setPasswordData({
           currentPassword: "",
           newPassword: "",
@@ -103,7 +103,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
         });
       })
       .catch((err: any) => {
-        toast.error(err.response?.data?.message || "Gagal memperbarui password");
+        toast.error(err.response?.data?.message || "Failed to update password");
       })
       .finally(() => setIsPasswordLoading(false));
   };
@@ -134,12 +134,12 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
       }
     })
       .then(() => {
-        toast.success("Foto profil berhasil diperbarui!");
+        toast.success("Profile photo updated successfully!");
         if (onUpdateUser) onUpdateUser();
       })
       .catch((err: any) => {
         console.error("Upload error", err);
-        toast.error("Gagal mengupload foto");
+        toast.error("Failed to upload photo");
         // Revert preview on error
         setPhotoPreview(user?.avatar_url || null);
       })
@@ -153,8 +153,8 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <PageHeader
-        title="Profil Pengguna"
-        description="Kelola informasi akun dan keamanan Anda."
+        title="User Profile"
+        description="Manage your account information and security."
         icon={Shield}
       />
 
@@ -226,15 +226,15 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
               <User className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 dark:text-white">Informasi Pribadi</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Perbarui identitas akun anda</p>
+              <h3 className="font-bold text-slate-900 dark:text-white">Personal Information</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Update your account identity</p>
             </div>
           </div>
 
           <form onSubmit={handleProfileSubmit} className="space-y-5 flex-1">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nama Lengkap</Label>
+                <Label htmlFor="name">Full Name</Label>
                 <Input
                   id="name"
                   value={profileData.name}
@@ -245,7 +245,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Alamat Email</Label>
+                <Label htmlFor="email">Email Address</Label>
                 <Input
                   id="email"
                   type="email"
@@ -257,7 +257,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role">Akses Role</Label>
+                <Label htmlFor="role">Access Role</Label>
                 <div className="relative">
                   <Input
                     id="role"
@@ -268,7 +268,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
                   <Shield className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 </div>
                 <p className="text-[10px] text-slate-400">
-                  *Hubungi Administrator untuk perubahan hak akses.
+                  *Contact Administrator for access rights changes.
                 </p>
               </div>
             </div>
@@ -277,7 +277,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
               <Button type="submit" disabled={isProfileLoading} className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700 text-white">
                 {isProfileLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {!isProfileLoading && <Save className="w-4 h-4 mr-2" />}
-                Simpan Perubahan
+                Save Changes
               </Button>
             </div>
           </form>
@@ -290,15 +290,15 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 dark:text-white">Keamanan</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Lindungi akun dengan password kuat</p>
+              <h3 className="font-bold text-slate-900 dark:text-white">Security</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Protect your account with a strong password</p>
             </div>
           </div>
 
           <form onSubmit={handlePasswordSubmit} className="space-y-5 flex-1">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="currentPassword">Password Saat Ini</Label>
+                <Label htmlFor="currentPassword">Current Password</Label>
                 <div className="relative">
                   <Input
                     id="currentPassword"
@@ -307,7 +307,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
                     onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                     required
                     disabled={isPasswordLoading}
-                    placeholder="Masukan password lama..."
+                    placeholder="Enter old password..."
                   />
                   <Button
                     type="button"
@@ -323,7 +323,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword">Password Baru</Label>
+                  <Label htmlFor="newPassword">New Password</Label>
                   <div className="relative">
                     <Input
                       id="newPassword"
@@ -332,7 +332,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
                       onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                       required
                       disabled={isPasswordLoading}
-                      placeholder="Minimal 8 karakter"
+                      placeholder="Minimum 8 characters"
                     />
                     <Button
                       type="button"
@@ -347,7 +347,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Konfirmasi</Label>
+                  <Label htmlFor="confirmPassword">Confirm</Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
@@ -356,7 +356,7 @@ export function ProfilPengguna({ user, onUpdateUser }: ProfilPenggunaProps) {
                       onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                       required
                       disabled={isPasswordLoading}
-                      placeholder="Ulangi password"
+                      placeholder="Repeat password"
                     />
                     <Button
                       type="button"

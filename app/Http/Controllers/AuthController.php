@@ -57,14 +57,14 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
-            return response()->json(['message' => 'Password saat ini salah.'], 422);
+            return response()->json(['message' => 'Current password is incorrect.'], 422);
         }
 
         $user->update([
             'password' => \Illuminate\Support\Facades\Hash::make($request->new_password)
         ]);
 
-        return response()->json(['message' => 'Password berhasil diperbarui.']);
+        return response()->json(['message' => 'Password successfully updated.']);
     }
 
     public function updateProfile(Request $request)
@@ -78,7 +78,7 @@ class AuthController extends Controller
 
         $user->update($validated);
 
-        return response()->json(['message' => 'Profil berhasil diperbarui.', 'user' => $user]);
+        return response()->json(['message' => 'Profile successfully updated.', 'user' => $user]);
     }
 
     public function uploadPhoto(Request $request)
@@ -105,11 +105,11 @@ class AuthController extends Controller
             $user->update(['avatar_url' => $url]);
 
             return response()->json([
-                'message' => 'Foto profil berhasil diperbarui.',
+                'message' => 'Profile photo successfully updated.',
                 'avatar_url' => $url
             ]);
         }
 
-        return response()->json(['message' => 'Gagal mengupload foto.'], 400);
+        return response()->json(['message' => 'Failed to upload photo.'], 400);
     }
 }

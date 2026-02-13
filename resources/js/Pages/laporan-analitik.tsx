@@ -23,14 +23,14 @@ const PrintHeader = ({ user, range }: { user: any, range: string }) => (
                     <Activity className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Laporan Analitik Sistem</h1>
+                    <h1 className="text-2xl font-bold text-slate-900">System Analytics Report</h1>
                     <p className="text-sm text-slate-500">Log Monitor Dashboard</p>
                 </div>
             </div>
             <div className="text-right">
-                <p className="text-sm text-slate-500">Dicetak oleh: <span className="font-medium text-slate-900">{user.name}</span></p>
-                <p className="text-sm text-slate-500">Tanggal Cetak: <span className="font-medium text-slate-900">{new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span></p>
-                <p className="text-sm text-slate-500 mt-1">Periode Data: <span className="font-medium text-indigo-600 uppercase">{range.replace('_', ' ')}</span></p>
+                <p className="text-sm text-slate-500">Printed by: <span className="font-medium text-slate-900">{user.name}</span></p>
+                <p className="text-sm text-slate-500">Print Date: <span className="font-medium text-slate-900">{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span></p>
+                <p className="text-sm text-slate-500 mt-1">Data Period: <span className="font-medium text-indigo-600 uppercase">{range.replace('_', ' ')}</span></p>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@ const PrintHeader = ({ user, range }: { user: any, range: string }) => (
 // Helper for printing Lists (Severity, Apps, Rankings)
 const PrintDataList = ({ data, labelKey = "label", valueKey = "value" }: { data: any[], labelKey?: string, valueKey?: string }) => (
     <div className="hidden print:block mt-4 w-full">
-        <div className="text-xs font-semibold text-slate-500 mb-2 border-b border-slate-200 pb-1">Detail Data</div>
+        <div className="text-xs font-semibold text-slate-500 mb-2 border-b border-slate-200 pb-1">Data Details</div>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
             {data.slice(0, 10).map((d, i) => ( // Limit to top 10 for print
                 <div key={i} className="flex justify-between text-xs py-0.5 border-b border-slate-100 last:border-0">
@@ -51,18 +51,16 @@ const PrintDataList = ({ data, labelKey = "label", valueKey = "value" }: { data:
     </div>
 );
 
-// Helper for Trend Data (Last 5 Days)
 const PrintTrendTable = ({ data }: { data: any[] }) => {
-    // Get last 5 data points, reversed
     const recentData = [...data].reverse().slice(0, 5);
     return (
         <div className="hidden print:block mt-4 w-full">
-            <div className="text-xs font-semibold text-slate-500 mb-2 border-b border-slate-200 pb-1">Data Terakhir (5 Hari)</div>
+            <div className="text-xs font-semibold text-slate-500 mb-2 border-b border-slate-200 pb-1">Recent Data (5 Days)</div>
             <div className="grid grid-cols-1 gap-y-1">
                 {recentData.map((d, i) => (
                     <div key={i} className="flex justify-between text-xs py-1 border-b border-slate-100 last:border-0">
-                        <span className="text-slate-700">{new Date(d.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                        <span className="font-medium text-slate-900">{d.count} Error</span>
+                        <span className="text-slate-700">{new Date(d.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                        <span className="font-medium text-slate-900">{d.count} Errors</span>
                     </div>
                 ))}
             </div>
@@ -110,7 +108,7 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
 
             } catch (error) {
                 console.error("Unexpected analytics error:", error);
-                toast.error("Gagal memuat sebagian data analitik.");
+                toast.error("Failed to load some analytics data.");
             } finally {
                 setIsAnalyticsLoading(false);
             }
@@ -173,8 +171,8 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
             {/* Header Section (Hidden on Print) */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
                 <PageHeader
-                    title="Laporan Analitik"
-                    description="Analisis performa aplikasi dan tren error dalam periode waktu tertentu."
+                    title="Analytics Report"
+                    description="Application performance analysis and error trends over a specific period."
                     icon={PieChart}
                 />
 
@@ -185,20 +183,20 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                         className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white shadow-sm cursor-pointer transition-colors rounded-lg h-10"
                     >
                         <Download className="w-4 h-4 mr-2" />
-                        Cetak Laporan (PDF)
+                        Print Report (PDF)
                     </Button>
 
                     <Select value={range} onValueChange={setRange}>
                         <SelectTrigger className="w-[180px] h-10 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 dark:text-slate-200 rounded-lg shadow-sm focus:ring-indigo-500/20">
                             <div className="flex items-center gap-2.5">
                                 <CalendarIcon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                                <SelectValue placeholder="Pilih Periode" />
+                                <SelectValue placeholder="Select Period" />
                             </div>
                         </SelectTrigger>
                         <SelectContent align="end" className="dark:bg-slate-900 dark:border-slate-800">
-                            <SelectItem value="7_days">7 Hari Terakhir</SelectItem>
-                            <SelectItem value="30_days">30 Hari Terakhir</SelectItem>
-                            <SelectItem value="all_time">Semua Waktu</SelectItem>
+                            <SelectItem value="7_days">Last 7 Days</SelectItem>
+                            <SelectItem value="30_days">Last 30 Days</SelectItem>
+                            <SelectItem value="all_time">All Time</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -224,9 +222,9 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                     <CardHeader className="pb-2">
                         <div className="flex items-center gap-2">
                             <Activity className="w-5 h-5 text-rose-500" />
-                            <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">Tren Error Global</CardTitle>
+                            <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">Global Error Trend</CardTitle>
                         </div>
-                        <CardDescription className="dark:text-slate-400">Volume error yang tercatat sistem setiap hari</CardDescription>
+                        <CardDescription className="dark:text-slate-400">Volume of errors recorded by the system daily</CardDescription>
                     </CardHeader>
                     <CardContent className="h-[300px] print:h-auto print:block">
                         <div className="h-full w-full print:h-[260px] print:mb-10">
@@ -241,9 +239,9 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                     <CardHeader className="pb-2">
                         <div className="flex items-center gap-2">
                             <AlertTriangle className="w-5 h-5 text-amber-500" />
-                            <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">Distribusi Severity</CardTitle>
+                            <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">Severity Distribution</CardTitle>
                         </div>
-                        <CardDescription className="dark:text-slate-400">Proporsi tingkat keparahan error</CardDescription>
+                        <CardDescription className="dark:text-slate-400">Proportion of error severity levels</CardDescription>
                     </CardHeader>
                     <CardContent className="h-[300px] print:h-[auto] flex flex-col items-center justify-center">
                         <div className="h-[200px] w-full flex justify-center">
@@ -259,13 +257,13 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                         <div className="flex items-center gap-2">
                             <BarChart3 className="w-5 h-5 text-indigo-500" />
                             <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">
-                                {user.role === 'admin' ? "Produktifitas Developer" : "Perbandingan Aplikasi"}
+                                {user.role === 'admin' ? "Developer Productivity" : "Application Comparison"}
                             </CardTitle>
                         </div>
                         <CardDescription className="dark:text-slate-400">
                             {user.role === 'admin'
-                                ? "Jumlah error yang berhasil diselesaikan per developer"
-                                : "Jumlah error per aplikasi yang ditugaskan"}
+                                ? "Number of resolved errors per developer"
+                                : "Number of errors per assigned application"}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="h-[300px] print:h-[auto] flex flex-col justify-between">
@@ -280,7 +278,7 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                             <div className="h-full flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-700">
                                 <BarChart3 className="w-10 h-10 mb-2 opacity-50" />
                                 <span className="text-sm font-medium">
-                                    {user.role === 'admin' ? "Belum ada data developer" : "Belum ada data aplikasi"}
+                                    {user.role === 'admin' ? "No developer data yet" : "No application data yet"}
                                 </span>
                             </div>
                         )}
@@ -293,16 +291,16 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                         <div className="flex items-center gap-2">
                             <PieChart className="w-5 h-5 text-emerald-500" />
                             <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">
-                                {user.role === 'admin' ? "Top Aplikasi Bermasalah" : "Kategori Error Terbanyak"}
+                                {user.role === 'admin' ? "Top Problematic Apps" : "Top Error Categories"}
                             </CardTitle>
                         </div>
-                        <CardDescription className="dark:text-slate-400">Ranking sumber masalah utama</CardDescription>
+                        <CardDescription className="dark:text-slate-400">Ranking of main error sources</CardDescription>
                     </CardHeader>
                     <CardContent className="h-[300px] print:h-[auto] flex flex-col items-center justify-center">
                         {chartErrors.topErrors ? (
                             <div className="flex flex-col items-center justify-center text-red-500">
                                 <AlertTriangle className="w-8 h-8 mb-2 opacity-80" />
-                                <span className="text-sm font-medium">Gagal memuat data</span>
+                                <span className="text-sm font-medium">Failed to load data</span>
                             </div>
                         ) : topErrors.length > 0 ? (
                             <>
@@ -317,7 +315,7 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
                             </>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-slate-400">
-                                <span className="text-sm font-medium">Tidak ada data ranking</span>
+                                <span className="text-sm font-medium">No ranking data</span>
                             </div>
                         )}
                     </CardContent>
@@ -326,7 +324,7 @@ export function LaporanAnalitik({ user }: LaporanAnalitikProps) {
 
             {/* Print Footer */}
             <div className="hidden print:block mt-8 text-center text-xs text-slate-400">
-                <p>Dokumen ini dicetak otomatis dari Sistem Monitoring Log.</p>
+                <p>This document is automatically generated from the Log Monitoring System.</p>
                 <p>&copy; {new Date().getFullYear()} Eris Monitoring System.</p>
             </div>
         </div>

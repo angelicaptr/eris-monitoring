@@ -26,15 +26,15 @@ export function Login({ onLoginSuccess }: LoginProps) {
             const response = await (window as any).axios.post("/login", { email, password });
 
             if (response.status === 200) {
-                toast.success("Login Berhasil", { description: "Selamat datang kembali di ERIS" });
+                toast.success("Login Successful", { description: "Welcome back to ERIS" });
                 setTimeout(() => {
                     onLoginSuccess(response.data.user);
                 }, 500);
             }
         } catch (error: any) {
             console.error(error);
-            setErrorMessage(error.response?.data?.message || "Email atau password salah.");
-            toast.error("Gagal Masuk");
+            setErrorMessage(error.response?.data?.message || "Invalid email or password.");
+            toast.error("Login Failed");
         } finally {
             setIsLoading(false);
         }
@@ -54,7 +54,7 @@ export function Login({ onLoginSuccess }: LoginProps) {
                         </h1>
                     </div>
                     <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase mb-6">Error Insight</p>
-                    <p className="text-slate-400 text-sm">Masuk untuk mengakses monitoring system</p>
+                    <p className="text-slate-400 text-sm">Login to access the monitoring system</p>
                 </div>
 
                 {errorMessage && (
@@ -120,9 +120,9 @@ export function Login({ onLoginSuccess }: LoginProps) {
                         className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-6 rounded-xl shadow-lg shadow-indigo-600/20 transition-all duration-300 mt-4 active:scale-[0.98]"
                     >
                         {isLoading ? (
-                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Verifikasi...</>
+                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Verifying...</>
                         ) : (
-                            "Masuk Dashboard"
+                            "Enter Dashboard"
                         )}
                     </Button>
                 </form>

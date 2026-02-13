@@ -9,7 +9,7 @@ import { PageHeader } from "@/Components/ui/page-header";
 export function DokumentasiAPI() {
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Code berhasil disalin!");
+    toast.success("Code successfully copied!");
   };
 
   const endpointUrl = "http://localhost:8000/api/logs";
@@ -17,8 +17,8 @@ export function DokumentasiAPI() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <PageHeader
-        title="Dokumentasi API"
-        description="Panduan integrasi sistem error monitoring untuk tim IT."
+        title="API Documentation"
+        description="System error monitoring integration guide for IT teams."
         icon={BookOpen}
       />
 
@@ -26,10 +26,10 @@ export function DokumentasiAPI() {
         <div className="flex items-start gap-4">
           <Terminal className="w-8 h-8 text-cyan-400 mt-1" />
           <div>
-            <h3 className="font-semibold text-xl mb-2 text-cyan-500">Petunjuk Identifikasi</h3>
+            <h3 className="font-semibold text-xl mb-2 text-cyan-500">Identification Guide</h3>
             <p className="text-slate-300">
-              Sistem ini menggunakan <strong>API Key</strong> untuk mengidentifikasi aplikasi pengirim log.
-              API Key harus dikirim melalui <strong>Header</strong>, bukan Body.
+              This system uses <strong>API Key</strong> to identify the sending application.
+              The API Key must be sent via <strong>Header</strong>, not Body.
             </p>
           </div>
         </div>
@@ -37,7 +37,7 @@ export function DokumentasiAPI() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Informasi Endpoint</h3>
+          <h3 className="text-lg font-semibold mb-4">Endpoint Information</h3>
           <div className="space-y-4">
             <div>
               <Label>Base URL</Label>
@@ -57,7 +57,7 @@ export function DokumentasiAPI() {
               </div>
             </div>
             <div>
-              <Label>Headers Wajib</Label>
+              <Label>Required Headers</Label>
               <div className="mt-2 space-y-2 font-mono text-sm">
                 <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-900 p-2 rounded">
                   <span className="text-slate-600 dark:text-slate-400">Content-Type</span>
@@ -73,25 +73,25 @@ export function DokumentasiAPI() {
         </Card>
 
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Struktur Request Body</h3>
+          <h3 className="text-lg font-semibold mb-4">Request Body Structure</h3>
           <div className="relative h-[250px]">
             <pre className="bg-slate-950 text-slate-100 p-4 rounded-lg overflow-auto text-sm h-full font-mono border border-slate-800">
               {`{
-  // Wajib
-  "message": "Pesan error singkat",
+  // Required
+  "message": "Short error message",
   
-  // Opsional (Default: Auto-detect / Error)
+  // Optional (Default: Auto-detect / Error)
   // Values: critical, warning, error
   "severity": "critical",
 
-  // Opsional
-  "stack_trace": "Error trace lengkap...",
+  // Optional
+  "stack_trace": "Complete error trace...",
   
-  // Opsional (Format: YYYY-MM-DD HH:mm:ss)
-  // Mengatur waktu kejadian error (untuk simulasi/backdate)
+  // Optional (Format: YYYY-MM-DD HH:mm:ss)
+  // Set error occurrence time (for simulation/backdate)
   "happened_at": "2025-12-01 08:30:00",
   
-  // Opsional (Object bebas)
+  // Optional (Arbitrary object)
   "metadata": {
     "user_id": 123,
     "path": "/transaction/pay",
@@ -104,7 +104,7 @@ export function DokumentasiAPI() {
       </div>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Contoh Kode Implementasi</h3>
+        <h3 className="text-lg font-semibold mb-4">Implementation Code Examples</h3>
         <Tabs defaultValue="javascript">
           <TabsList>
             <TabsTrigger value="javascript">JavaScript (Fetch)</TabsTrigger>
@@ -186,8 +186,8 @@ requests.post(
       <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900 rounded-lg p-4 flex gap-3 text-yellow-800 dark:text-yellow-200 text-sm">
         <AlertCircle className="w-5 h-5 shrink-0" />
         <p>
-          <strong>Keamanan:</strong> Jangan pernah mengekspos API Key di kode frontend yang dapat diakses publik (client-side).
-          Gunakan proxy server atau environment variable di sisi build jika memungkinkan.
+          <strong>Security:</strong> Never expose the API Key in public frontend code (client-side).
+          Use a proxy server or environment variables on the build side if possible.
         </p>
       </div>
 
